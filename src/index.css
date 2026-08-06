@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+@layer utilities {
+  .glow-neon {
+    box-shadow: 0 0 20px rgba(120, 255, 0, 0.4);
+  }
+  .glow-neon-lg {
+    box-shadow: 0 0 35px rgba(120, 255, 0, 0.6);
+  }
+  .text-neon {
+    color: #78FF00;
+  }
+  .bg-neon {
+    background-color: #78FF00;
+  }
+  .border-neon {
+    border-color: #78FF00;
+  }
+}
+
+/* Custom Leaflet Map Dark Styling */
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+  border-radius: 1rem;
+  z-index: 10;
+  background-color: #121814 !important;
+}
+
+.dark-tiles .leaflet-tile-container img {
+  filter: brightness(0.7) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3);
+}
+
+/* Custom Scrollbar for sleek dark feel */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: #0A0D0B;
+}
+::-webkit-scrollbar-thumb {
+  background: #1A231C;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #78FF00;
+}
+
