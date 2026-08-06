@@ -36,6 +36,13 @@ export const WorkoutCompletionModal: React.FC<WorkoutCompletionModalProps> = ({
   const timeFormatted = minutes > 0 ? `${minutes}min ${seconds < 10 ? '0' : ''}${seconds}s` : `${seconds}s`;
   const isMusculacao = workoutRecord.tipo === 'rotina';
 
+  const exerciseCount = workoutRecord.detalhesExercicios?.length || 1;
+  const avgCalPerEx = Math.round(workoutRecord.caloriasQueimadas / exerciseCount);
+  const avgTimeSeconds = Math.round(workoutRecord.duracaoSegundos / exerciseCount);
+  const avgTimeMins = Math.floor(avgTimeSeconds / 60);
+  const avgTimeSecs = avgTimeSeconds % 60;
+  const avgTimeFormatted = avgTimeMins > 0 ? `${avgTimeMins}m ${avgTimeSecs}s` : `${avgTimeSecs}s`;
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0A0D0B] text-white animate-fadeIn select-none overflow-y-auto">
       <div className="w-full max-w-sm flex flex-col items-center text-center my-auto py-6">
@@ -83,58 +90,93 @@ export const WorkoutCompletionModal: React.FC<WorkoutCompletionModalProps> = ({
             <span className="font-bold text-white">{workoutRecord.diaSemanaNome}</span>
           </div>
 
-          <div className="grid grid-cols-3 gap-2 py-1">
-            {/* Duration / Tempo de Treino */}
-            <div className="flex flex-col items-center bg-[#1A231C] p-3 rounded-xl border border-[#78FF00]/30 shadow-inner">
+          <div className={`grid ${isMusculacao ? 'grid-cols-2' : 'grid-cols-3'} gap-2 py-1`}>
+            {/* Duration / Tempo Geral */}
+            <div className="flex flex-col items-center justify-center bg-[#1A231C] p-3 rounded-xl border border-[#78FF00]/30 shadow-inner">
               <Clock className="w-5 h-5 text-[#78FF00] mb-1" />
-              <span className="text-[10px] uppercase font-bold text-gray-400 tracking-wider text-center">Tempo</span>
-              <span className="text-xs sm:text-sm font-black text-[#78FF00] mt-0.5">{timeFormatted}</span>
+              <span className="text-[10px] uppercase font-bold text-gray-400 tracking-wider text-center">Tempo Geral</span>
+              <span className="text-xs font-black text-[#78FF00] mt-0.5">{timeFormatted}</span>
             </div>
 
             {/* Calories / Calorias Gastas */}
-            <div className="flex flex-col items-center bg-[#1A231C] p-3 rounded-xl border border-orange-500/30 shadow-inner">
+            <div className="flex flex-col items-center justify-center bg-[#1A231C] p-3 rounded-xl border border-orange-500/30 shadow-inner">
               <Flame className="w-5 h-5 text-orange-400 mb-1" />
-              <span className="text-[10px] uppercase font-bold text-gray-400 tracking-wider text-center">Calorias</span>
-              <span className="text-xs sm:text-sm font-black text-orange-400 mt-0.5">{workoutRecord.caloriasQueimadas} kcal</span>
+              <span className="text-[10px] uppercase font-bold text-gray-400 tracking-wider text-center">Gasto Total</span>
+              <span className="text-xs font-black text-orange-400 mt-0.5">{workoutRecord.caloriasQueimadas} kcal</span>
             </div>
 
-            {/* Distance or Exercises */}
-            <div className="flex flex-col items-center bg-[#1A231C] p-3 rounded-xl border border-gray-800">
-              {workoutRecord.tipo === 'gps' ? (
-                <>
-                  <Navigation className="w-5 h-5 text-[#78FF00] mb-1" />
-                  <span className="text-[10px] uppercase font-bold text-gray-400 tracking-wider text-center">Distância</span>
-                  <span className="text-xs sm:text-sm font-black text-white mt-0.5">{workoutRecord.distanciaKm || 0} km</span>
-                </>
-              ) : (
-                <>
-                  <Trophy className="w-5 h-5 text-[#78FF00] mb-1" />
-                  <span className="text-[10px] uppercase font-bold text-gray-400 tracking-wider text-center">Exercícios</span>
-                  <span className="text-xs sm:text-sm font-black text-white mt-0.5">{workoutRecord.detalhesExercicios?.length || 4} ex</span>
-                </>
-              )}
-            </div>
+            {isMusculacao ? (
+              <>
+                {/* Tempo Médio por Exercício */}
+                <div className="flex flex-col items-center justify-center bg-[#1A231C] p-3 rounded-xl border border-[#78FF00]/10 shadow-inner">
+                  <Clock className="w-4 h-4 text-gray-400 mb-1" />
+                  <span className="text-[10px] uppercase font-bold text-gray-500 tracking-wider text-center">Tempo/Exercício</span>
+                  <span className="text-xs font-black text-white mt-0.5">{avgTimeFormatted}</span>
+                </div>
+
+                {/* Gasto Médio por Exercício */}
+                <div className="flex flex-col items-center justify-center bg-[#1A231C] p-3 rounded-xl border border-orange-500/10 shadow-inner">
+                  <Flame className="w-4 h-4 text-gray-400 mb-1" />
+                  <span className="text-[10px] uppercase font-bold text-gray-500 tracking-wider text-center">Gasto Médio/Ex</span>
+                  <span className="text-xs font-black text-white mt-0.5">{avgCalPerEx} kcal</span>
+                </div>
+              </>
+            ) : (
+              <div className="flex flex-col items-center justify-center bg-[#1A231C] p-3 rounded-xl border border-gray-800">
+                <Navigation className="w-5 h-5 text-[#78FF00] mb-1" />
+                <span className="text-[10px] uppercase font-bold text-gray-400 tracking-wider text-center">Distância</span>
+                <span className="text-xs sm:text-sm font-black text-white mt-0.5">{workoutRecord.distanciaKm || 0} km</span>
+              </div>
+            )}
           </div>
 
           {/* Detailed Musculação Exercises Breakdown */}
           {isMusculacao && workoutRecord.detalhesExercicios && workoutRecord.detalhesExercicios.length > 0 && (
-            <div className="pt-2 border-t border-gray-800 text-left space-y-2">
+            <div className="pt-2.5 border-t border-gray-800 text-left space-y-2">
               <div className="flex items-center justify-between text-[11px] font-bold text-gray-400 uppercase tracking-wider">
                 <span className="flex items-center gap-1">
                   <Award className="w-3.5 h-3.5 text-[#78FF00]" />
-                  Exercícios Realizados
+                  Exercícios & Gasto Médio
                 </span>
-                <span className="text-[#78FF00]">{workoutRecord.detalhesExercicios.length} de {workoutRecord.detalhesExercicios.length}</span>
+                <span className="text-[#78FF00] font-extrabold bg-[#78FF00]/10 border border-[#78FF00]/20 px-2 py-0.5 rounded-md text-[10px]">
+                  ~{avgCalPerEx} kcal/ex
+                </span>
               </div>
-              <div className="max-h-36 overflow-y-auto space-y-1.5 pr-1">
-                {workoutRecord.detalhesExercicios.map((exDetail, idx) => (
-                  <div key={idx} className="flex items-center justify-between bg-[#1A231C] p-2 rounded-xl text-xs border border-gray-800">
-                    <div className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-[#78FF00] shrink-0" />
-                      <span className="font-bold text-gray-200">{exDetail}</span>
+              <div className="max-h-48 overflow-y-auto space-y-2 pr-1">
+                {workoutRecord.detalhesExercicios.map((ex, idx) => {
+                  const isObject = typeof ex === 'object' && ex !== null;
+                  const nome = isObject ? ex.nome : String(ex);
+                  const info = isObject ? ex.info : '';
+                  const cals = isObject ? ex.calorias : avgCalPerEx;
+                  
+                  const exMinutes = isObject ? Math.floor((ex.tempoSegundos || 0) / 60) : 0;
+                  const exSeconds = isObject ? (ex.tempoSegundos || 0) % 60 : 0;
+                  const exTimeFormatted = exMinutes > 0 ? `${exMinutes}m ${exSeconds}s` : `${exSeconds}s`;
+
+                  return (
+                    <div key={idx} className="flex flex-col bg-[#1A231C] p-2.5 rounded-xl text-xs border border-gray-800">
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="flex items-start gap-2 min-w-0 pr-2">
+                          <CheckCircle2 className="w-4 h-4 text-[#78FF00] shrink-0 mt-0.5" />
+                          <div className="flex flex-col">
+                            <span className="font-bold text-gray-200 line-clamp-1">{nome}</span>
+                            {info && <span className="text-[10px] text-gray-500 mt-0.5">{info}</span>}
+                          </div>
+                        </div>
+                        <div className="flex flex-col items-end shrink-0 gap-1">
+                          <span className="text-[11px] font-extrabold text-orange-400 bg-orange-500/10 border border-orange-500/20 px-1.5 py-0.5 rounded-md">
+                            ~{cals} kcal
+                          </span>
+                          {isObject && (
+                            <span className="text-[10px] font-semibold text-[#78FF00] flex items-center gap-1">
+                              <Clock className="w-3 h-3" /> {exTimeFormatted}
+                            </span>
+                          )}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           )}

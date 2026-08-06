@@ -56,7 +56,7 @@ export interface WorkoutRecord {
   distanciaKm?: number;
   velocidadeMediaKmH?: number;
   caloriasQueimadas: number;
-  detalhesExercicios?: string[];
+  detalhesExercicios?: (string | { nome: string; info: string; tempoSegundos: number; calorias: number })[];
 }
 
 export interface LgpdConsentRecord {

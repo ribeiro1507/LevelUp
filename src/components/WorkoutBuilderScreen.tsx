@@ -22,6 +22,10 @@ export const WorkoutBuilderScreen: React.FC<WorkoutBuilderScreenProps> = ({
   const [completedExercises, setCompletedExercises] = useState<{ [key: string]: boolean }>({});
   const [executionSeconds, setExecutionSeconds] = useState<number>(0);
   const [executionTimerActive, setExecutionTimerActive] = useState<boolean>(false);
+  
+  // Track time per exercise
+  const [exerciseMetrics, setExerciseMetrics] = useState<Record<string, { tempoSegundos: number; calorias: number }>>({});
+  const [lastActionTime, setLastActionTime] = useState<number>(0);
 
   // Confirm Modal state
   const [confirmModal, setConfirmModal] = useState<{
@@ -173,15 +177,40 @@ export const WorkoutBuilderScreen: React.FC<WorkoutBuilderScreenProps> = ({
   const handleStartWorkoutExecution = (routine: WorkoutRoutine) => {
     setExecutingRoutine(routine);
     setCompletedExercises({});
+    setExerciseMetrics({});
+    setLastActionTime(0);
     setExecutionSeconds(0);
     setExecutionTimerActive(true);
   };
 
   const handleToggleExerciseCheck = (exId: string) => {
-    setCompletedExercises((prev) => ({
-      ...prev,
-      [exId]: !prev[exId],
-    }));
+    setCompletedExercises((prev) => {
+      const isNowChecked = !prev[exId];
+      
+      if (isNowChecked) {
+        // Calculate time spent since last action
+        const timeSpent = executionSeconds - lastActionTime;
+        const cals = Math.round((timeSpent / 60) * 7.5); // 7.5 kcal/min avg
+        
+        setExerciseMetrics((m) => ({
+          ...m,
+          [exId]: { tempoSegundos: timeSpent, calorias: cals }
+        }));
+        setLastActionTime(executionSeconds);
+      } else {
+        // Remove metrics if unchecked
+        setExerciseMetrics((m) => {
+          const newM = { ...m };
+          delete newM[exId];
+          return newM;
+        });
+      }
+
+      return {
+        ...prev,
+        [exId]: isNowChecked,
+      };
+    });
   };
 
   const handleFinishRoutineExecution = () => {
@@ -193,8 +222,29 @@ export const WorkoutBuilderScreen: React.FC<WorkoutBuilderScreenProps> = ({
     const dayOfWeekIdx = now.getDay() === 0 ? 6 : now.getDay() - 1;
     const diasNome = ['Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado', 'Domingo'];
 
-    const secondsWorked = executionSeconds > 0 ? executionSeconds : 1800;
-    const caloriesBurned = Math.max(30, Math.round((secondsWorked / 60) * 7.5));
+    const completedExs = executingRoutine.exercicios.filter(e => completedExercises[e.id]);
+    
+    // Total time is just executionSeconds
+    let secondsWorked = executionSeconds;
+    const minutesWorked = Math.max(1, Math.round(secondsWorked / 60));
+    
+    let totalCaloriesBurned = 0;
+    
+    const detalhes = completedExs.map((e) => {
+      const metric = exerciseMetrics[e.id] || { tempoSegundos: 0, calorias: 0 };
+      totalCaloriesBurned += metric.calorias;
+      return {
+        nome: e.nome,
+        info: `${e.series}x${e.repeticoes}`,
+        tempoSegundos: metric.tempoSegundos,
+        calorias: metric.calorias
+      };
+    });
+
+    // If no calories were tracked (e.g. they didn't check any or checked them instantly), fallback to general time
+    if (totalCaloriesBurned === 0) {
+      totalCaloriesBurned = Math.round(minutesWorked * 7.5);
+    }
 
     const newRecord: WorkoutRecord = {
       id: `rec-routine-${Date.now()}`,
@@ -204,11 +254,17 @@ export const WorkoutBuilderScreen: React.FC<WorkoutBuilderScreenProps> = ({
       tipo: 'rotina',
       tituloTreino: executingRoutine.titulo,
       duracaoSegundos: secondsWorked,
-      caloriasQueimadas: caloriesBurned,
-      detalhesExercicios: executingRoutine.exercicios.map((e) => `${e.nome} (${e.series}x${e.repeticoes})`),
+      caloriasQueimadas: totalCaloriesBurned,
+      detalhesExercicios: detalhes.length > 0 ? detalhes : executingRoutine.exercicios.map((e) => ({
+        nome: e.nome,
+        info: `${e.series}x${e.repeticoes}`,
+        tempoSegundos: Math.round(secondsWorked / executingRoutine.exercicios.length),
+        calorias: Math.round(totalCaloriesBurned / executingRoutine.exercicios.length)
+      })),
     };
 
     setExecutingRoutine(null);
+    setExecutionSeconds(0);
     onFinishWorkout(newRecord);
   };
 
@@ -462,14 +518,17 @@ export const WorkoutBuilderScreen: React.FC<WorkoutBuilderScreenProps> = ({
                 </div>
               </div>
 
-              {/* Start Workout Execution Button */}
-              <button
-                onClick={() => handleStartWorkoutExecution(selectedRoutine)}
-                className="w-full py-4 px-4 bg-[#78FF00] hover:bg-[#6be600] active:scale-[0.99] text-[#0A0D0B] font-extrabold text-base rounded-xl shadow-[0_0_20px_rgba(120,255,0,0.35)] transition-all flex items-center justify-center gap-2 mt-4"
-              >
-                <Play className="w-5 h-5 fill-current" />
-                <span>INICIAR ESTE TREINO</span>
-              </button>
+              {/* Action Buttons: Start Execution */}
+              <div className="space-y-2 mt-4">
+                <button
+                  type="button"
+                  onClick={() => handleStartWorkoutExecution(selectedRoutine)}
+                  className="w-full py-4 px-4 bg-[#78FF00] hover:bg-[#6be600] active:scale-[0.99] text-[#0A0D0B] font-extrabold text-base rounded-xl shadow-[0_0_20px_rgba(120,255,0,0.35)] transition-all flex items-center justify-center gap-2"
+                >
+                  <Play className="w-5 h-5 fill-current" />
+                  <span>INICIAR TREINO</span>
+                </button>
+              </div>
             </div>
           )}
         </div>
