@@ -56,23 +56,21 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   return (
     <div className="p-4 sm:p-6 space-y-4 pb-24 text-white select-none">
       {/* Top Header Bar with Back Button */}
-      <div className="flex items-center justify-between">
-        {onBack ? (
+      <div className="relative flex items-center justify-center min-h-[44px]">
+        {onBack && (
           <button
             type="button"
             onClick={onBack}
-            className="p-2.5 rounded-xl bg-[#121814] border border-gray-800 text-gray-300 hover:text-[#78FF00] hover:border-[#78FF00]/40 transition-all flex items-center gap-1.5 text-xs font-bold active:scale-95"
+            className="absolute left-0 p-2.5 rounded-xl bg-[#121814] border border-gray-800 text-gray-300 hover:text-[#78FF00] hover:border-[#78FF00]/40 transition-all flex items-center gap-1.5 text-xs font-bold active:scale-95"
             title="Voltar para a tela anterior"
           >
             <ArrowLeft className="w-4 h-4 text-[#78FF00]" />
             <span>Voltar</span>
           </button>
-        ) : (
-          <div />
         )}
 
         <div className="flex items-center gap-1.5 text-xs font-black uppercase tracking-widest text-[#78FF00] bg-[#78FF00]/10 px-3 py-1 rounded-full border border-[#78FF00]/20">
-          <span>LevelUp Fit</span>
+          <span>LevelUp</span>
         </div>
       </div>
 
@@ -202,29 +200,6 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         </div>
       </div>
 
-      {/* Weekly Stats Summary Cards */}
-      <div className="grid grid-cols-2 gap-3">
-        <div className="bg-[#121814] border border-gray-800 p-4 rounded-2xl flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-orange-500/10 text-orange-400 border border-orange-500/20">
-            <Flame className="w-5 h-5" />
-          </div>
-          <div>
-            <span className="text-[10px] uppercase font-bold text-gray-400">Gasto Semanal</span>
-            <p className="text-lg font-black text-white">{totalCalorias} <span className="text-xs font-normal text-gray-400">kcal</span></p>
-          </div>
-        </div>
-
-        <div className="bg-[#121814] border border-gray-800 p-4 rounded-2xl flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-[#78FF00]/10 text-[#78FF00] border border-[#78FF00]/20">
-            <Clock className="w-5 h-5" />
-          </div>
-          <div>
-            <span className="text-[10px] uppercase font-bold text-gray-400">Tempo Ativo</span>
-            <p className="text-lg font-black text-white">{totalMinutos} <span className="text-xs font-normal text-gray-400">min</span></p>
-          </div>
-        </div>
-      </div>
-
       {/* Quick Launch Action Cards */}
       <div className="space-y-2">
         <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider">Ações Rápidas</h3>
@@ -254,52 +229,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         </div>
       </div>
 
-      {/* Historic Log List */}
-      <div className="space-y-3">
-        <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center justify-between">
-          <span>Histórico Recente</span>
-          <span className="text-[10px] text-[#78FF00] font-normal">{records.length} treinos no total</span>
-        </h3>
 
-        <div className="space-y-2">
-          {records.slice(0, 10).map((r) => (
-            <div
-              key={r.id}
-              className="p-3.5 bg-[#121814] border border-gray-800/80 rounded-2xl flex items-center justify-between hover:border-[#78FF00]/30 transition-colors gap-2"
-            >
-              <div className="flex items-center gap-3 min-w-0">
-                <div className="w-10 h-10 rounded-xl bg-[#1A231C] border border-[#78FF00]/30 flex items-center justify-center text-[#78FF00] shrink-0">
-                  {r.tipo === 'gps' ? <Navigation className="w-5 h-5" /> : <Dumbbell className="w-5 h-5" />}
-                </div>
-                <div className="min-w-0">
-                  <h4 className="text-sm font-bold text-white truncate">{r.tituloTreino}</h4>
-                  <p className="text-[11px] text-gray-400 truncate">
-                    {r.diaSemanaNome} • {Math.round(r.duracaoSegundos / 60)} min • {r.caloriasQueimadas} kcal
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2 shrink-0">
-                {r.distanciaKm && (
-                  <span className="text-xs font-extrabold text-[#78FF00] bg-[#78FF00]/10 px-2 py-0.5 rounded-full">
-                    {r.distanciaKm} km
-                  </span>
-                )}
-                {onDeleteRecord && (
-                  <button
-                    type="button"
-                    onClick={() => setRecordToDeleteId(r.id)}
-                    className="p-1.5 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg border border-transparent hover:border-red-500/30 transition-colors"
-                    title="Deletar registro de treino"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
 
       <ConfirmModal
         isOpen={!!recordToDeleteId}
