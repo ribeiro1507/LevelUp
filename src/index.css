@@ -27,6 +27,11 @@
   background-color: #121814 !important;
 }
 
+/* Smooth Polyline glow and fluid rendering */
+.smooth-route-polyline {
+  filter: drop-shadow(0 0 6px rgba(120, 255, 0, 0.75));
+}
+
 .dark-tiles .leaflet-tile-container img {
   filter: brightness(0.7) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3);
 }

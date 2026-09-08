@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Play, Pause, RotateCcw, CheckCircle2, Navigation, MapPin, Footprints, Bike, Flame, Timer, Compass, Zap, ArrowLeft, Trash2, Route, ShieldCheck } from 'lucide-react';
+import { Play, Pause, RotateCcw, CheckCircle2, Navigation, Footprints, Bike, Flame, Timer, Compass, Zap, ArrowLeft, Trash2, Route, ShieldCheck } from 'lucide-react';
 import L from 'leaflet';
 import { ActivityType, LocationPoint, WorkoutRecord } from '../types';
 import { ConfirmModal } from './ConfirmModal';
@@ -28,6 +28,14 @@ export const RecordScreen: React.FC<RecordScreenProps> = ({ onFinishWorkout, onB
   const rawPointsRef = useRef<LocationPoint[]>([]);
   const isMatchingInProgressRef = useRef<boolean>(false);
   const osrmDebounceTimerRef = useRef<any>(null);
+
+  // Smooth animated path drawing refs
+  const lastDrawnPosRef = useRef<{ lat: number; lng: number } | null>(null);
+  const activeAnimationRef = useRef<{
+    rafId: number;
+    targetLat: number;
+    targetLng: number;
+  } | null>(null);
 
   // Map DOM reference
   const mapContainerRef = useRef<HTMLDivElement>(null);
@@ -74,7 +82,10 @@ export const RecordScreen: React.FC<RecordScreenProps> = ({ onFinishWorkout, onB
       const polyline = L.polyline([], {
         color: '#78FF00',
         weight: 5,
-        opacity: 0.9,
+        opacity: 0.95,
+        lineCap: 'round',
+        lineJoin: 'round',
+        className: 'smooth-route-polyline',
       }).addTo(map);
 
       mapInstanceRef.current = map;
@@ -83,6 +94,10 @@ export const RecordScreen: React.FC<RecordScreenProps> = ({ onFinishWorkout, onB
     }
 
     return () => {
+      if (activeAnimationRef.current) {
+        cancelAnimationFrame(activeAnimationRef.current.rafId);
+        activeAnimationRef.current = null;
+      }
       if (mapInstanceRef.current) {
         mapInstanceRef.current.remove();
         mapInstanceRef.current = null;
@@ -182,9 +197,21 @@ export const RecordScreen: React.FC<RecordScreenProps> = ({ onFinishWorkout, onB
         });
 
         if (snappedLatLngs.length > 0 && polylineRef.current) {
+          if (activeAnimationRef.current) {
+            cancelAnimationFrame(activeAnimationRef.current.rafId);
+            activeAnimationRef.current = null;
+          }
           // Substitui e suaviza o traçado da Polyline pelas ruas reais mapeadas
           polylineRef.current.setLatLngs(snappedLatLngs);
           setIsOsmSnapped(true);
+
+          const lastCoord = snappedLatLngs[snappedLatLngs.length - 1];
+          if (lastCoord) {
+            lastDrawnPosRef.current = { lat: lastCoord[0], lng: lastCoord[1] };
+            if (markerRef.current) {
+              markerRef.current.setLatLng(lastCoord);
+            }
+          }
 
           if (matchedDistanceMeters > 0) {
             const matchedKm = Number((matchedDistanceMeters / 1000).toFixed(2));
@@ -349,16 +376,119 @@ export const RecordScreen: React.FC<RecordScreenProps> = ({ onFinishWorkout, onB
     return () => clearInterval(simInterval);
   }, [isTracking, isSimulatingGps, activity]);
 
+  // Animação suave para desenhar progressivamente a Polyline entre a coordenada anterior e a nova
+  const animatePolylineStep = (
+    startLat: number,
+    startLng: number,
+    targetLat: number,
+    targetLng: number,
+    durationMs = 450
+  ) => {
+    if (!polylineRef.current || !mapInstanceRef.current || !markerRef.current) return;
+
+    // Adiciona o novo vértice na ponta da Polyline começando na posição anterior
+    polylineRef.current.addLatLng([startLat, startLng]);
+
+    const startTime = performance.now();
+
+    const step = (currentTime: number) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(1, elapsed / durationMs);
+      // Curva ease-out quad para desaceleração suave ao se aproximar da coordenada final
+      const ease = 1 - (1 - progress) * (1 - progress);
+
+      const curLat = startLat + (targetLat - startLat) * ease;
+      const curLng = startLng + (targetLng - startLng) * ease;
+
+      if (polylineRef.current) {
+        const latLngs = polylineRef.current.getLatLngs() as L.LatLng[];
+        if (latLngs.length > 0) {
+          latLngs[latLngs.length - 1] = L.latLng(curLat, curLng);
+          polylineRef.current.setLatLngs(latLngs);
+        }
+      }
+
+      if (markerRef.current) {
+        markerRef.current.setLatLng([curLat, curLng]);
+      }
+
+      if (progress < 1) {
+        const rafId = requestAnimationFrame(step);
+        activeAnimationRef.current = {
+          rafId,
+          targetLat,
+          targetLng,
+        };
+      } else {
+        activeAnimationRef.current = null;
+        lastDrawnPosRef.current = { lat: targetLat, lng: targetLng };
+        if (polylineRef.current) {
+          const latLngs = polylineRef.current.getLatLngs() as L.LatLng[];
+          if (latLngs.length > 0) {
+            latLngs[latLngs.length - 1] = L.latLng(targetLat, targetLng);
+            polylineRef.current.setLatLngs(latLngs);
+          }
+        }
+        if (markerRef.current) {
+          markerRef.current.setLatLng([targetLat, targetLng]);
+        }
+      }
+    };
+
+    const rafId = requestAnimationFrame(step);
+    activeAnimationRef.current = {
+      rafId,
+      targetLat,
+      targetLng,
+    };
+
+    // Suaviza também o deslocamento da câmera do mapa para a nova coordenada
+    mapInstanceRef.current.panTo([targetLat, targetLng], {
+      animate: true,
+      duration: durationMs / 1000,
+      easeLinearity: 0.25,
+    });
+  };
+
   const updateMapPosition = (lat: number, lng: number, point: LocationPoint) => {
     setCenterCoords({ lat, lng });
     setLocationPoints((prev) => [...prev, point]);
     rawPointsRef.current.push(point);
 
-    // 3. Atualiza dinamicamente o array de coordenadas da Polyline do Leaflet em tempo real
+    // 3. Atualiza dinamicamente a Polyline do Leaflet com animação suave em tempo real
     if (mapInstanceRef.current && markerRef.current && polylineRef.current) {
-      markerRef.current.setLatLng([lat, lng]);
-      mapInstanceRef.current.panTo([lat, lng]);
-      polylineRef.current.addLatLng([lat, lng]);
+      // Se já houver um passo de animação ativo, finaliza-o imediatamente no alvo anterior
+      if (activeAnimationRef.current) {
+        cancelAnimationFrame(activeAnimationRef.current.rafId);
+        const latLngs = polylineRef.current.getLatLngs() as L.LatLng[];
+        if (latLngs.length > 0) {
+          latLngs[latLngs.length - 1] = L.latLng(
+            activeAnimationRef.current.targetLat,
+            activeAnimationRef.current.targetLng
+          );
+          polylineRef.current.setLatLngs(latLngs);
+        }
+        lastDrawnPosRef.current = {
+          lat: activeAnimationRef.current.targetLat,
+          lng: activeAnimationRef.current.targetLng,
+        };
+        activeAnimationRef.current = null;
+      }
+
+      const currentLatLngs = polylineRef.current.getLatLngs() as L.LatLng[];
+
+      if (currentLatLngs.length === 0 || !lastDrawnPosRef.current) {
+        // Primeiro ponto registrado: posiciona sem salto
+        polylineRef.current.addLatLng([lat, lng]);
+        markerRef.current.setLatLng([lat, lng]);
+        mapInstanceRef.current.setView([lat, lng], 16);
+        lastDrawnPosRef.current = { lat, lng };
+      } else {
+        // Desenha o segmento de forma suave e contínua sem saltos bruscos
+        const startLat = lastDrawnPosRef.current.lat;
+        const startLng = lastDrawnPosRef.current.lng;
+        animatePolylineStep(startLat, startLng, lat, lng, 450);
+      }
     }
 
     // 4. Agenda integração com a API OSRM (/match) para encaixar na malha viária
@@ -376,6 +506,11 @@ export const RecordScreen: React.FC<RecordScreenProps> = ({ onFinishWorkout, onB
 
   const handleReset = () => {
     setIsTracking(false);
+    if (activeAnimationRef.current) {
+      cancelAnimationFrame(activeAnimationRef.current.rafId);
+      activeAnimationRef.current = null;
+    }
+    lastDrawnPosRef.current = null;
     setSeconds(0);
     setDistanceKm(0);
     setCurrentSpeedKmH(0);
@@ -396,6 +531,10 @@ export const RecordScreen: React.FC<RecordScreenProps> = ({ onFinishWorkout, onB
 
   const handleFinish = async () => {
     setIsTracking(false);
+    if (activeAnimationRef.current) {
+      cancelAnimationFrame(activeAnimationRef.current.rafId);
+      activeAnimationRef.current = null;
+    }
 
     // Envia pontos capturados para OSRM para garantir o traçado final perfeito pelas ruas
     if (rawPointsRef.current.length >= 2) {
@@ -542,13 +681,8 @@ export const RecordScreen: React.FC<RecordScreenProps> = ({ onFinishWorkout, onB
         </div>
 
         <div className="absolute top-3 right-3 z-20 flex flex-col items-end gap-1.5">
-          <div className="bg-[#0A0D0B]/85 backdrop-blur-md px-2.5 py-1.5 rounded-xl border border-gray-800 text-[11px] font-bold text-[#78FF00] flex items-center gap-1 shadow-lg">
-            <MapPin className="w-3.5 h-3.5 text-[#78FF00]" />
-            <span>{locationPoints.length} pts</span>
-          </div>
-
           {isOsmSnapped && (
-            <div className="bg-sky-500/20 backdrop-blur-md px-2 py-1 rounded-lg border border-sky-500/40 text-[10px] font-bold text-sky-400 flex items-center gap-1 shadow-lg">
+            <div className="bg-sky-500/20 backdrop-blur-md px-2.5 py-1.5 rounded-xl border border-sky-500/40 text-[10px] font-bold text-sky-400 flex items-center gap-1 shadow-lg">
               <Route className="w-3 h-3" />
               <span>{isMatchingLoading ? 'Ajustando vias...' : 'Vias OSRM'}</span>
             </div>
