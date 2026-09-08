@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Play, Pause, RotateCcw, CheckCircle2, Navigation, MapPin, Footprints, Bike, Flame, Timer, Compass, Zap, ArrowLeft, Trash2 } from 'lucide-react';
+import { Play, Pause, RotateCcw, CheckCircle2, Navigation, MapPin, Footprints, Bike, Flame, Timer, Compass, Zap, ArrowLeft, Trash2, Route, ShieldCheck } from 'lucide-react';
 import L from 'leaflet';
 import { ActivityType, LocationPoint, WorkoutRecord } from '../types';
 import { ConfirmModal } from './ConfirmModal';
@@ -17,9 +17,17 @@ export const RecordScreen: React.FC<RecordScreenProps> = ({ onFinishWorkout, onB
   const [currentSpeedKmH, setCurrentSpeedKmH] = useState(0);
   const [calories, setCalories] = useState(0);
   const [locationPoints, setLocationPoints] = useState<LocationPoint[]>([]);
+  const [gpsAccuracy, setGpsAccuracy] = useState<number | null>(null);
+  const [isOsmSnapped, setIsOsmSnapped] = useState<boolean>(false);
+  const [isMatchingLoading, setIsMatchingLoading] = useState<boolean>(false);
   const [gpsError, setGpsError] = useState<string | null>(null);
   const [isSimulatingGps, setIsSimulatingGps] = useState(false);
   const [isConfirmCancelOpen, setIsConfirmCancelOpen] = useState(false);
+
+  // Raw coordinates ref to prevent closure staleness and feed OSRM map-matching
+  const rawPointsRef = useRef<LocationPoint[]>([]);
+  const isMatchingInProgressRef = useRef<boolean>(false);
+  const osrmDebounceTimerRef = useRef<any>(null);
 
   // Map DOM reference
   const mapContainerRef = useRef<HTMLDivElement>(null);
@@ -125,16 +133,106 @@ export const RecordScreen: React.FC<RecordScreenProps> = ({ onFinishWorkout, onB
     setCalories(Math.round((seconds / 60) * calPerMin));
   }, [seconds, isTracking, activity]);
 
+  // OSRM Map-Matching function: snaps GPS points to real road geometries
+  const matchRouteWithOSRM = async (points: LocationPoint[], currentActivity: ActivityType) => {
+    if (points.length < 2 || isMatchingInProgressRef.current) return;
+
+    try {
+      isMatchingInProgressRef.current = true;
+      setIsMatchingLoading(true);
+
+      const profile = currentActivity === 'pedalar' ? 'bike' : 'foot';
+
+      // Keep up to 80 points to respect public OSRM URL limits
+      let queryPoints = points;
+      if (points.length > 80) {
+        const step = Math.ceil(points.length / 80);
+        queryPoints = points.filter((_, idx) => idx % step === 0 || idx === points.length - 1);
+      }
+
+      const coordsStr = queryPoints
+        .map((p) => `${p.lng.toFixed(6)},${p.lat.toFixed(6)}`)
+        .join(';');
+      const radiusesStr = queryPoints.map(() => '25').join(';');
+
+      const url = `https://router.project-osrm.org/match/v1/${profile}/${coordsStr}?overview=full&geometries=geojson&radiuses=${radiusesStr}&gaps=split`;
+
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 4000);
+
+      const response = await fetch(url, { signal: controller.signal });
+      clearTimeout(timeoutId);
+
+      if (!response.ok) return;
+
+      const data = await response.json();
+      if (data.code === 'Ok' && Array.isArray(data.matchings) && data.matchings.length > 0) {
+        const snappedLatLngs: [number, number][] = [];
+        let matchedDistanceMeters = 0;
+
+        data.matchings.forEach((match: any) => {
+          if (match.distance) {
+            matchedDistanceMeters += match.distance;
+          }
+          if (match.geometry?.coordinates) {
+            match.geometry.coordinates.forEach(([lng, lat]: [number, number]) => {
+              snappedLatLngs.push([lat, lng]);
+            });
+          }
+        });
+
+        if (snappedLatLngs.length > 0 && polylineRef.current) {
+          // Substitui e suaviza o traçado da Polyline pelas ruas reais mapeadas
+          polylineRef.current.setLatLngs(snappedLatLngs);
+          setIsOsmSnapped(true);
+
+          if (matchedDistanceMeters > 0) {
+            const matchedKm = Number((matchedDistanceMeters / 1000).toFixed(2));
+            if (matchedKm > 0) {
+              setDistanceKm(matchedKm);
+              accumulatedMetersRef.current = matchedDistanceMeters;
+            }
+          }
+        }
+      }
+    } catch (err) {
+      console.debug('OSRM match status:', err);
+    } finally {
+      isMatchingInProgressRef.current = false;
+      setIsMatchingLoading(false);
+    }
+  };
+
+  const scheduleOsrmMatch = (points: LocationPoint[], currentActivity: ActivityType) => {
+    if (points.length < 2) return;
+    if (osrmDebounceTimerRef.current) {
+      clearTimeout(osrmDebounceTimerRef.current);
+    }
+    // Debounce to allow continuous smooth GPS acquisition while periodically snapping to roads
+    osrmDebounceTimerRef.current = setTimeout(() => {
+      matchRouteWithOSRM(points, currentActivity);
+    }, 2500);
+  };
+
   // Real Mobile GPS Geolocation or Simulation Watcher
   useEffect(() => {
     let watchId: number | null = null;
 
     if (isTracking && !isSimulatingGps) {
       if ('geolocation' in navigator) {
+        // 1. Refatoração da lógica de captura do GPS com alta precisão
         watchId = navigator.geolocation.watchPosition(
           (position) => {
-            const { latitude, longitude, speed } = position.coords;
+            const { latitude, longitude, speed, accuracy } = position.coords;
             const now = position.timestamp || Date.now();
+
+            // 2. Filtro de precisão das coordenadas: ignorar se accuracy > 15 metros
+            if (accuracy !== undefined && accuracy !== null && accuracy > 15) {
+              console.warn(`[GPS] Ponto descartado por imprecisão: ${accuracy.toFixed(1)}m (> 15m)`);
+              setGpsAccuracy(Math.round(accuracy));
+              return;
+            }
+            setGpsAccuracy(accuracy !== undefined && accuracy !== null ? Math.round(accuracy) : null);
 
             let speedKmH = 0;
 
@@ -181,11 +279,16 @@ export const RecordScreen: React.FC<RecordScreenProps> = ({ onFinishWorkout, onB
             updateMapPosition(latitude, longitude, newPoint);
           },
           (err) => {
+            // Se for timeout transitório buscando satélites, não abortar
+            if (err.code === 3) {
+              console.warn('[GPS] Aguardando sinal preciso (timeout 5s)...');
+              return;
+            }
             console.warn('GPS position error:', err.message);
             setGpsError('GPS indisponível no navegador. Usando simulação de percurso.');
             setIsSimulatingGps(true);
           },
-          { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+          { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
         );
       } else {
         setIsSimulatingGps(true);
@@ -249,16 +352,26 @@ export const RecordScreen: React.FC<RecordScreenProps> = ({ onFinishWorkout, onB
   const updateMapPosition = (lat: number, lng: number, point: LocationPoint) => {
     setCenterCoords({ lat, lng });
     setLocationPoints((prev) => [...prev, point]);
+    rawPointsRef.current.push(point);
 
+    // 3. Atualiza dinamicamente o array de coordenadas da Polyline do Leaflet em tempo real
     if (mapInstanceRef.current && markerRef.current && polylineRef.current) {
       markerRef.current.setLatLng([lat, lng]);
       mapInstanceRef.current.panTo([lat, lng]);
       polylineRef.current.addLatLng([lat, lng]);
     }
+
+    // 4. Agenda integração com a API OSRM (/match) para encaixar na malha viária
+    scheduleOsrmMatch(rawPointsRef.current, activity);
   };
 
   const handleStartPause = () => {
-    setIsTracking(!isTracking);
+    const nextTracking = !isTracking;
+    setIsTracking(nextTracking);
+    if (!nextTracking && rawPointsRef.current.length >= 2) {
+      // Ajusta traçado com OSRM ao pausar
+      matchRouteWithOSRM(rawPointsRef.current, activity);
+    }
   };
 
   const handleReset = () => {
@@ -268,15 +381,26 @@ export const RecordScreen: React.FC<RecordScreenProps> = ({ onFinishWorkout, onB
     setCurrentSpeedKmH(0);
     setCalories(0);
     setLocationPoints([]);
+    setGpsAccuracy(null);
+    setIsOsmSnapped(false);
+    rawPointsRef.current = [];
     accumulatedMetersRef.current = 0;
     lastPositionRef.current = null;
+    if (osrmDebounceTimerRef.current) {
+      clearTimeout(osrmDebounceTimerRef.current);
+    }
     if (polylineRef.current) {
       polylineRef.current.setLatLngs([]);
     }
   };
 
-  const handleFinish = () => {
+  const handleFinish = async () => {
     setIsTracking(false);
+
+    // Envia pontos capturados para OSRM para garantir o traçado final perfeito pelas ruas
+    if (rawPointsRef.current.length >= 2) {
+      await matchRouteWithOSRM(rawPointsRef.current, activity);
+    }
 
     const now = new Date();
     const dayOfWeekIdx = now.getDay() === 0 ? 6 : now.getDay() - 1;
@@ -397,14 +521,38 @@ export const RecordScreen: React.FC<RecordScreenProps> = ({ onFinishWorkout, onB
         <div ref={mapContainerRef} className="w-full h-full z-10" />
 
         {/* Overlay map indicators */}
-        <div className="absolute top-3 left-3 z-20 bg-[#0A0D0B]/80 backdrop-blur-md px-3 py-1.5 rounded-xl border border-gray-800 text-[11px] font-bold text-gray-300 flex items-center gap-1.5">
-          <div className={`w-2 h-2 rounded-full ${isTracking ? 'bg-[#78FF00] animate-ping' : 'bg-gray-500'}`} />
-          <span>{isTracking ? 'GPS Rastreando...' : 'GPS Pronto'}</span>
+        <div className="absolute top-3 left-3 z-20 flex flex-wrap items-center gap-1.5 max-w-[65%]">
+          <div className="bg-[#0A0D0B]/85 backdrop-blur-md px-2.5 py-1.5 rounded-xl border border-gray-800 text-[11px] font-bold text-gray-300 flex items-center gap-1.5 shadow-lg">
+            <div className={`w-2 h-2 rounded-full ${isTracking ? 'bg-[#78FF00] animate-ping' : 'bg-gray-500'}`} />
+            <span>{isTracking ? 'Rastreando' : 'GPS Pronto'}</span>
+          </div>
+
+          {gpsAccuracy !== null && (
+            <div
+              className={`backdrop-blur-md px-2 py-1 rounded-lg border text-[10px] font-bold flex items-center gap-1 shadow-lg ${
+                gpsAccuracy <= 15
+                  ? 'bg-[#78FF00]/15 text-[#78FF00] border-[#78FF00]/40'
+                  : 'bg-amber-500/15 text-amber-400 border-amber-500/40'
+              }`}
+            >
+              <ShieldCheck className="w-3 h-3" />
+              <span>{gpsAccuracy}m {gpsAccuracy <= 15 ? 'Alta precisão' : '(filtrando)'}</span>
+            </div>
+          )}
         </div>
 
-        <div className="absolute top-3 right-3 z-20 bg-[#0A0D0B]/80 backdrop-blur-md px-3 py-1.5 rounded-xl border border-gray-800 text-[11px] font-bold text-[#78FF00] flex items-center gap-1">
-          <MapPin className="w-3.5 h-3.5 text-[#78FF00]" />
-          <span>{locationPoints.length} pontos</span>
+        <div className="absolute top-3 right-3 z-20 flex flex-col items-end gap-1.5">
+          <div className="bg-[#0A0D0B]/85 backdrop-blur-md px-2.5 py-1.5 rounded-xl border border-gray-800 text-[11px] font-bold text-[#78FF00] flex items-center gap-1 shadow-lg">
+            <MapPin className="w-3.5 h-3.5 text-[#78FF00]" />
+            <span>{locationPoints.length} pts</span>
+          </div>
+
+          {isOsmSnapped && (
+            <div className="bg-sky-500/20 backdrop-blur-md px-2 py-1 rounded-lg border border-sky-500/40 text-[10px] font-bold text-sky-400 flex items-center gap-1 shadow-lg">
+              <Route className="w-3 h-3" />
+              <span>{isMatchingLoading ? 'Ajustando vias...' : 'Vias OSRM'}</span>
+            </div>
+          )}
         </div>
       </div>
 
