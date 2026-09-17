@@ -9,6 +9,8 @@ import { WorkoutBuilderScreen } from './components/WorkoutBuilderScreen';
 import { ProfileScreen } from './components/ProfileScreen';
 import { WorkoutCompletionModal } from './components/WorkoutCompletionModal';
 import { LgpdModal } from './components/LgpdModal';
+import { InstallAppModal } from './components/InstallAppModal';
+import { PwaInstallBanner } from './components/PwaInstallBanner';
 import { DeviceFrame } from './components/DeviceFrame';
 import { UserProfile, WorkoutRoutine, WorkoutRecord } from './types';
 import {
@@ -27,11 +29,12 @@ export default function App() {
   const [workouts, setWorkouts] = useState<WorkoutRoutine[]>(getStoredWorkouts);
   const [records, setRecords] = useState<WorkoutRecord[]>(getStoredRecords);
 
-  const [authMode, setAuthMode] = useState<'login' | 'signup'>('signup');
+  const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
   const [activeTab, setActiveTab] = useState<'inicio' | 'gravar' | 'treinos' | 'perfil'>('inicio');
   const [tabHistory, setTabHistory] = useState<('inicio' | 'gravar' | 'treinos' | 'perfil')[]>(['inicio']);
   const [completedRecord, setCompletedRecord] = useState<WorkoutRecord | null>(null);
   const [isLgpdModalOpen, setIsLgpdModalOpen] = useState<boolean>(false);
+  const [isInstallModalOpen, setIsInstallModalOpen] = useState<boolean>(false);
 
   const handleNavigateTab = (tab: 'inicio' | 'gravar' | 'treinos' | 'perfil') => {
     if (activeTab !== tab) {
@@ -110,6 +113,19 @@ export default function App() {
     setActiveTab('inicio');
   };
 
+  const handleRestartSplash = () => {
+    setShowSplash(true);
+  };
+
+  const handleResetDemoData = () => {
+    localStorage.clear();
+    setUserProfile(INITIAL_USER_PROFILE);
+    setRecords([]);
+    setWorkouts(getStoredWorkouts());
+    setAuthMode('login');
+    setActiveTab('inicio');
+  };
+
   const renderContent = () => {
     // 1. Splash Screen
     if (showSplash) {
@@ -123,6 +139,7 @@ export default function App() {
           initialMode={authMode}
           onSignUpSuccess={handleSignUpSuccess}
           onSwitchMode={(mode) => setAuthMode(mode)}
+          onOpenInstallModal={() => setIsInstallModalOpen(true)}
         />
       );
     }
@@ -183,6 +200,7 @@ export default function App() {
               onLogout={handleLogout}
               onDeleteAccount={handleDeleteAccount}
               onBack={handleBackNavigation}
+              onOpenInstallModal={() => setIsInstallModalOpen(true)}
             />
           )}
         </div>
@@ -267,5 +285,19 @@ export default function App() {
     );
   };
 
-  return <DeviceFrame>{renderContent()}</DeviceFrame>;
+  return (
+    <DeviceFrame
+      onRestartSplash={handleRestartSplash}
+      onResetDemoData={handleResetDemoData}
+      onGoToLogin={handleLogout}
+      onOpenInstallModal={() => setIsInstallModalOpen(true)}
+    >
+      {renderContent()}
+      <PwaInstallBanner />
+      <InstallAppModal
+        isOpen={isInstallModalOpen}
+        onClose={() => setIsInstallModalOpen(false)}
+      />
+    </DeviceFrame>
+  );
 }

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" rx="128" fill="#0A0D0B"/>
+  <rect x="24" y="24" width="464" height="464" rx="104" fill="#121814" stroke="#78FF00" stroke-opacity="0.3" stroke-width="8"/>
+  <g transform="translate(256, 256)">
+    <!-- Upward arrow & energy badge for LevelUp -->
+    <path d="M-90 40 L0 -60 L90 40 L50 40 L0 -15 L-50 40 Z" fill="#78FF00" />
+    <path d="M-110 110 L0 0 L110 110 L70 110 L0 40 L-70 110 Z" fill="#78FF00" opacity="0.6" />
+    <!-- Center energy bolt / dot -->
+    <circle cx="0" cy="-105" r="28" fill="#78FF00" />
+  </g>
+</svg>

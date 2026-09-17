@@ -229,8 +229,6 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         </div>
       </div>
 
-
-
       <ConfirmModal
         isOpen={!!recordToDeleteId}
         title="Excluir Treino"

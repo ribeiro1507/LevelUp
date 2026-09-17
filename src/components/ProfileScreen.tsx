@@ -15,8 +15,11 @@ import {
   UserX,
   AlertTriangle,
   ArrowLeft,
+  Download,
 } from 'lucide-react';
 import { UserProfile, WorkoutRecord, Gender } from '../types';
+import { DownloadAppButton } from './DownloadAppButton';
+import { DirectApkDownloadButton } from './DirectApkDownloadButton';
 
 interface ProfileScreenProps {
   userProfile: UserProfile;
@@ -26,6 +29,7 @@ interface ProfileScreenProps {
   onLogout: () => void;
   onDeleteAccount: () => void;
   onBack?: () => void;
+  onOpenInstallModal?: () => void;
 }
 
 export const ProfileScreen: React.FC<ProfileScreenProps> = ({
@@ -36,6 +40,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
   onLogout,
   onDeleteAccount,
   onBack,
+  onOpenInstallModal,
 }) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [showDeleteConfirmModal, setShowDeleteConfirmModal] = useState<boolean>(false);
@@ -534,9 +539,13 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
         </div>
       </div>
 
-      {/* Action Buttons: Sair do App & Deletar a Conta */}
+      {/* Action Buttons: Baixar App, Sair & Deletar a Conta */}
       <div className="pt-2 space-y-2.5">
-        <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider">Ações da Conta</h3>
+        <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider">Ações do Aplicativo</h3>
+
+        <DirectApkDownloadButton variant="banner" />
+
+        <DownloadAppButton variant="full" />
 
         {/* Button 1: Sair do App */}
         <button

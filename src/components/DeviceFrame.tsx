@@ -1,16 +1,21 @@
 import React, { useState } from 'react';
 import { Smartphone, Monitor, RotateCcw, ShieldCheck, Wifi, Battery, Signal } from 'lucide-react';
+import { DownloadAppButton } from './DownloadAppButton';
 
 interface DeviceFrameProps {
   children: React.ReactNode;
-  onRestartSplash: () => void;
-  onResetDemoData: () => void;
+  onRestartSplash?: () => void;
+  onResetDemoData?: () => void;
+  onGoToLogin?: () => void;
+  onOpenInstallModal?: () => void;
 }
 
 export const DeviceFrame: React.FC<DeviceFrameProps> = ({
   children,
   onRestartSplash,
   onResetDemoData,
+  onGoToLogin,
+  onOpenInstallModal,
 }) => {
   const [isMobileView, setIsMobileView] = useState<boolean>(true);
 
@@ -47,22 +52,38 @@ export const DeviceFrame: React.FC<DeviceFrameProps> = ({
         </div>
 
         <div className="flex items-center gap-2">
-          <button
-            onClick={onRestartSplash}
-            className="px-2 py-1 bg-[#1A231C] hover:bg-gray-800 text-[#78FF00] border border-gray-800 rounded-lg text-[10px] font-bold flex items-center gap-1 transition-colors"
-            title="Ver tela de carregamento (Splash)"
-          >
-            <RotateCcw className="w-3 h-3 text-[#78FF00]" />
-            <span>Splash</span>
-          </button>
+          <DownloadAppButton variant="compact" label="Baixar App" />
 
-          <button
-            onClick={onResetDemoData}
-            className="px-2 py-1 bg-[#1A231C] hover:bg-gray-800 text-gray-300 border border-gray-800 rounded-lg text-[10px] font-bold transition-colors"
-            title="Resetar dados para padrão"
-          >
-            Reset
-          </button>
+          {onGoToLogin && (
+            <button
+              onClick={onGoToLogin}
+              className="px-2 py-1 bg-[#1A231C] hover:bg-gray-800 text-[#78FF00] border border-gray-800 rounded-lg text-[10px] font-bold transition-colors"
+              title="Ir para a Tela de Login"
+            >
+              Tela Login
+            </button>
+          )}
+
+          {onRestartSplash && (
+            <button
+              onClick={onRestartSplash}
+              className="px-2 py-1 bg-[#1A231C] hover:bg-gray-800 text-gray-300 border border-gray-800 rounded-lg text-[10px] font-bold flex items-center gap-1 transition-colors"
+              title="Ver tela de carregamento (Splash)"
+            >
+              <RotateCcw className="w-3 h-3 text-[#78FF00]" />
+              <span className="hidden sm:inline">Splash</span>
+            </button>
+          )}
+
+          {onResetDemoData && (
+            <button
+              onClick={onResetDemoData}
+              className="px-2 py-1 bg-[#1A231C] hover:bg-gray-800 text-gray-300 border border-gray-800 rounded-lg text-[10px] font-bold transition-colors"
+              title="Resetar dados para padrão"
+            >
+              Reset
+            </button>
+          )}
         </div>
       </div>
 

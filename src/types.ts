@@ -66,3 +66,23 @@ export interface LgpdConsentRecord {
   consentimentoDadosSaude: boolean;
   consentimentoLocalizacao: boolean;
 }
+
+export interface DeviceSocialAccount {
+  id: string;
+  provider: 'google' | 'apple';
+  name: string;
+  email: string;
+  avatarColor?: string;
+  photoUrl?: string;
+  isDefault?: boolean;
+}
+
+export interface DeviceSocialAuthStatus {
+  hasGoogleAccounts: boolean;
+  googleAccounts: DeviceSocialAccount[];
+  hasAppleAccount: boolean;
+  appleAccount: DeviceSocialAccount | null;
+  isChecking: boolean;
+  platformName?: string;
+}
+
