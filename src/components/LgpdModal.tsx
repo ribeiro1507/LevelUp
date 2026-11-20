@@ -16,21 +16,21 @@ export const LgpdModal: React.FC<LgpdModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
-      <div className="relative w-full max-w-lg bg-[#121814] border border-[#78FF00]/30 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
+      <div className="relative w-full max-w-lg bg-[var(--lu-surface)] border border-[var(--lu-accent-30)] rounded-2xl shadow-[0_0_40px_var(--lu-glow-soft)] overflow-hidden flex flex-col max-h-[85vh]">
         {/* Header */}
-        <div className="p-5 border-b border-gray-800 flex items-center justify-between bg-[#0A0D0B]">
+        <div className="p-5 border-b border-gray-800 flex items-center justify-between bg-[var(--lu-bg)]">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[#78FF00]/10 border border-[#78FF00]/40 flex items-center justify-center">
-              <ShieldCheck className="w-6 h-6 text-[#78FF00]" />
+            <div className="w-10 h-10 rounded-xl bg-[var(--lu-accent-15)] border border-[var(--lu-accent-40)] flex items-center justify-center">
+              <ShieldCheck className="w-6 h-6 text-[var(--lu-accent)]" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-white">Privacidade & LGPD</h3>
+              <h3 className="text-lg font-bold text-white">Privacidade &amp; LGPD</h3>
               <p className="text-xs text-gray-400">Lei nº 13.709/2018 - Brasil</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-lg bg-gray-800/80 text-gray-400 hover:text-white hover:bg-gray-700 transition-colors"
+            className="p-2 rounded-lg bg-gray-800/80 text-gray-400 hover:text-white hover:bg-gray-700 transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -38,8 +38,8 @@ export const LgpdModal: React.FC<LgpdModalProps> = ({
 
         {/* Content Body */}
         <div className="p-5 overflow-y-auto space-y-4 text-sm text-gray-300 leading-relaxed">
-          <div className="p-3 bg-[#1A231C] border border-[#78FF00]/20 rounded-xl text-xs text-[#78FF00] flex items-start gap-2">
-            <Lock className="w-4 h-4 shrink-0 mt-0.5" />
+          <div className="p-3 bg-[var(--lu-surface-alt)] border border-[var(--lu-accent-20)] rounded-xl text-xs text-[var(--lu-accent)] flex items-start gap-2">
+            <Lock className="w-4 h-4 shrink-0 mt-0.5 text-[var(--lu-accent)]" />
             <span>
               Sua privacidade é nossa prioridade absoluta. Todos os seus dados de localização, biometria e treinos são mantidos sob sigilo rigoroso.
             </span>
@@ -47,7 +47,7 @@ export const LgpdModal: React.FC<LgpdModalProps> = ({
 
           <div>
             <h4 className="font-bold text-white mb-1 flex items-center gap-2">
-              <FileText className="w-4 h-4 text-[#78FF00]" /> 1. Coleta de Dados Sensíveis de Saúde
+              <FileText className="w-4 h-4 text-[var(--lu-accent)]" /> 1. Coleta de Dados Sensíveis de Saúde
             </h4>
             <p className="text-xs text-gray-400">
               Coletamos seu peso, altura, idade e gênero exclusivamente para calcular o IMC, estimativa de gasto calórico e métricas de desempenho físico.
@@ -56,7 +56,7 @@ export const LgpdModal: React.FC<LgpdModalProps> = ({
 
           <div>
             <h4 className="font-bold text-white mb-1 flex items-center gap-2">
-              <UserCheck className="w-4 h-4 text-[#78FF00]" /> 2. Rastreamento por GPS
+              <UserCheck className="w-4 h-4 text-[var(--lu-accent)]" /> 2. Rastreamento por GPS
             </h4>
             <p className="text-xs text-gray-400">
               O acesso à sua localização ocorre unicamente durante a gravação ativa de corridas, caminhadas ou pedaladas para cálculo de distância e mapa de percurso. O GPS pode ser desativado a qualquer momento nas configurações.
@@ -65,7 +65,7 @@ export const LgpdModal: React.FC<LgpdModalProps> = ({
 
           <div>
             <h4 className="font-bold text-white mb-1 flex items-center gap-2">
-              <Trash2 className="w-4 h-4 text-[#78FF00]" /> 3. Seus Direitos (Titular dos Dados)
+              <Trash2 className="w-4 h-4 text-[var(--lu-accent)]" /> 3. Seus Direitos (Titular dos Dados)
             </h4>
             <ul className="text-xs text-gray-400 list-disc pl-5 space-y-1">
               <li>Confirmação da existência de tratamento dos seus dados.</li>
@@ -79,9 +79,9 @@ export const LgpdModal: React.FC<LgpdModalProps> = ({
             <div className="flex gap-2">
               <button
                 onClick={() => alert('Download do relatório de dados iniciado! Todos os seus dados foram empacotados em JSON.')}
-                className="flex-1 py-2 px-3 bg-[#1A231C] hover:bg-gray-800 text-xs text-gray-200 border border-gray-700 rounded-lg flex items-center justify-center gap-1.5 transition-colors"
+                className="flex-1 py-2 px-3 bg-[var(--lu-surface-alt)] hover:bg-gray-800 text-xs text-gray-200 border border-gray-700 rounded-lg flex items-center justify-center gap-1.5 transition-colors"
               >
-                <Download className="w-3.5 h-3.5 text-[#78FF00]" />
+                <Download className="w-3.5 h-3.5 text-[var(--lu-accent)]" />
                 Baixar Meus Dados (JSON)
               </button>
             </div>
@@ -89,7 +89,7 @@ export const LgpdModal: React.FC<LgpdModalProps> = ({
         </div>
 
         {/* Footer Actions */}
-        <div className="p-4 border-t border-gray-800 bg-[#0A0D0B] flex gap-3">
+        <div className="p-4 border-t border-gray-800 bg-[var(--lu-bg)] flex gap-3">
           {onAcceptAndClose ? (
             <>
               <button
@@ -100,7 +100,7 @@ export const LgpdModal: React.FC<LgpdModalProps> = ({
               </button>
               <button
                 onClick={onAcceptAndClose}
-                className="flex-1 py-2.5 px-4 rounded-xl bg-[#78FF00] hover:bg-[#68e000] text-[#0A0D0B] text-sm font-bold shadow-[0_0_15px_rgba(120,255,0,0.3)] transition-all"
+                className="flex-1 py-2.5 px-4 rounded-xl bg-[var(--lu-accent)] hover:bg-[var(--lu-accent-hover)] text-[var(--lu-on-accent)] text-sm font-bold shadow-[0_0_15px_var(--lu-glow)] transition-all"
               >
                 Aceitar & Concordar
               </button>
@@ -108,7 +108,7 @@ export const LgpdModal: React.FC<LgpdModalProps> = ({
           ) : (
             <button
               onClick={onClose}
-              className="w-full py-2.5 px-4 rounded-xl bg-[#78FF00] text-[#0A0D0B] font-bold text-sm"
+              className="w-full py-2.5 px-4 rounded-xl bg-[var(--lu-accent)] hover:bg-[var(--lu-accent-hover)] text-[var(--lu-on-accent)] font-bold text-sm transition-all"
             >
               Ciente dos Termos
             </button>

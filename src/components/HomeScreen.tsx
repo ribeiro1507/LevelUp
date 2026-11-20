@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Calendar, CheckCircle, Flame, Clock, Navigation, Dumbbell, ShieldCheck, ChevronRight, User, Scale, ArrowLeft, Trash2 } from 'lucide-react';
+import { Calendar, CheckCircle, Navigation, Dumbbell, ShieldCheck, ChevronRight, ArrowLeft } from 'lucide-react';
 import { UserProfile, WorkoutRecord } from '../types';
 import { ConfirmModal } from './ConfirmModal';
+import { ThemeToggleButton } from './ThemeToggleButton';
 
 interface HomeScreenProps {
   userProfile: UserProfile;
@@ -47,81 +48,85 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
     }
   });
 
-  // Calculate total weekly stats
-  const totalCalorias = records.reduce((acc, r) => acc + (r.caloriasQueimadas || 0), 0);
-  const totalMinutos = Math.round(records.reduce((acc, r) => acc + (r.duracaoSegundos || 0), 0) / 60);
-
   const selectedDayWorkouts = workoutsByDay[selectedDayIndex] || [];
 
   return (
     <div className="p-4 sm:p-6 space-y-4 pb-24 text-white select-none">
-      {/* Top Header Bar with Back Button */}
-      <div className="relative flex items-center justify-center min-h-[44px]">
-        {onBack && (
+      {/* Top Header Bar with Back Button & Theme Toggle */}
+      <div className="flex items-center justify-between gap-2 min-h-[44px]">
+        {onBack ? (
           <button
             type="button"
             onClick={onBack}
-            className="absolute left-0 p-2.5 rounded-xl bg-[#121814] border border-gray-800 text-gray-300 hover:text-[#78FF00] hover:border-[#78FF00]/40 transition-all flex items-center gap-1.5 text-xs font-bold active:scale-95"
+            className="p-2.5 rounded-xl bg-[var(--lu-surface)] border border-gray-800 text-gray-300 hover:text-[var(--lu-accent)] hover:border-[var(--lu-accent-40)] transition-all flex items-center gap-1.5 text-xs font-bold active:scale-95 cursor-pointer shrink-0"
             title="Voltar para a tela anterior"
           >
-            <ArrowLeft className="w-4 h-4 text-[#78FF00]" />
+            <ArrowLeft className="w-4 h-4 text-[var(--lu-accent)]" />
             <span>Voltar</span>
           </button>
+        ) : (
+          <div className="w-16" />
         )}
 
-        <div className="flex items-center gap-1.5 text-xs font-black uppercase tracking-widest text-[#78FF00] bg-[#78FF00]/10 px-3 py-1 rounded-full border border-[#78FF00]/20">
-          <span>LevelUp</span>
+        <div className="flex items-center gap-1 text-xs font-black uppercase tracking-widest px-3.5 py-1.5 rounded-full bg-[var(--lu-surface)] border border-[var(--lu-accent-30)] shadow-[0_0_15px_var(--lu-glow-soft)]">
+          <span className="text-white">Level</span>
+          <span className="text-[var(--lu-accent)]">Up</span>
         </div>
+
+        <ThemeToggleButton variant="pill" />
       </div>
 
       {/* User Header Profile Bar */}
-      <div className="flex items-center justify-between bg-[#121814] border border-[#78FF00]/20 p-4 rounded-2xl shadow-lg">
+      <div className="relative overflow-hidden flex items-center justify-between bg-[var(--lu-surface)] border border-[var(--lu-accent-30)] p-4 rounded-2xl shadow-lg">
+        <div className="absolute -right-8 -top-8 w-28 h-28 bg-[var(--lu-accent-10)] rounded-full blur-2xl pointer-events-none" />
         <button
           onClick={onNavigateToProfile}
-          className="flex items-center gap-3 text-left hover:opacity-90 transition-opacity"
+          className="relative z-10 flex items-center gap-3 text-left hover:opacity-90 transition-opacity cursor-pointer"
         >
-          <div className="w-12 h-12 rounded-2xl bg-[#78FF00]/10 border border-[#78FF00] flex items-center justify-center font-black text-[#78FF00] text-lg shadow-[0_0_15px_rgba(120,255,0,0.3)] overflow-hidden">
-            {userProfile.fotoPerfil ? (
-              <img
-                src={userProfile.fotoPerfil}
-                alt="Foto de Perfil"
-                referrerPolicy="no-referrer"
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              userProfile.nomeCompleto ? userProfile.nomeCompleto.charAt(0).toUpperCase() : 'A'
-            )}
+          <div className="p-[2px] rounded-2xl bg-[var(--lu-accent)] shadow-[0_0_15px_var(--lu-glow-soft)]">
+            <div className="w-11 h-11 rounded-[14px] bg-[var(--lu-surface)] flex items-center justify-center font-black text-[var(--lu-accent)] text-lg overflow-hidden">
+              {userProfile.fotoPerfil ? (
+                <img
+                  src={userProfile.fotoPerfil}
+                  alt="Foto de Perfil"
+                  referrerPolicy="no-referrer"
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                userProfile.nomeCompleto ? userProfile.nomeCompleto.charAt(0).toUpperCase() : 'A'
+              )}
+            </div>
           </div>
           <div>
             <h2 className="font-extrabold text-base text-white flex items-center gap-1.5">
               <span>{userProfile.nomeCompleto || 'Atleta LevelUp'}</span>
-              <ChevronRight className="w-4 h-4 text-gray-500" />
+              <ChevronRight className="w-4 h-4 text-[var(--lu-accent)]" />
             </h2>
-            <div className="flex items-center gap-2 text-xs text-gray-400 mt-0.5">
-              <span>{userProfile.peso}kg</span> • <span>{userProfile.altura}cm</span> • <span>IMC: <strong className="text-[#78FF00]">{imc}</strong></span>
+            <div className="flex items-center gap-2 text-xs text-gray-400 mt-0.5 tabular-nums">
+              <span>{userProfile.peso}kg</span> · <span>{userProfile.altura}cm</span> · <span>IMC <strong className="text-[var(--lu-accent)]">{imc}</strong></span>
             </div>
           </div>
         </button>
 
         <button
           onClick={onOpenLgpd}
-          className="p-2 rounded-xl bg-[#1A231C] border border-gray-800 text-[#78FF00] hover:bg-gray-800 transition-colors flex items-center gap-1 text-[11px] font-semibold"
+          className="relative z-10 p-2 rounded-xl bg-[var(--lu-surface-alt)] border border-gray-800 hover:border-[var(--lu-accent-40)] text-[var(--lu-accent)] hover:bg-[var(--lu-surface-hover)] transition-colors flex items-center gap-1 text-[11px] font-semibold cursor-pointer"
           title="Ver LGPD e Privacidade"
         >
-          <ShieldCheck className="w-4 h-4 text-[#78FF00]" />
+          <ShieldCheck className="w-4 h-4 text-[var(--lu-accent)]" />
           <span className="hidden sm:inline">LGPD</span>
         </button>
       </div>
 
       {/* Days of the Week Trained Tracker Widget */}
-      <div className="bg-[#121814] border border-gray-800 p-4 rounded-2xl space-y-3">
+      <div className="bg-[var(--lu-surface)] border border-gray-800 p-4 rounded-2xl space-y-3">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#78FF00]">
-            <Calendar className="w-4 h-4" />
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[var(--lu-accent)]">
+            <Calendar className="w-4 h-4 text-[var(--lu-accent)]" />
             <span>Frequência da Semana</span>
           </div>
-          <span className="text-[11px] text-gray-400">
-            <strong className="text-white">{Object.values(workoutsByDay).filter((w) => w.length > 0).length}</strong> de 7 dias treinados
+          <span className="text-[11px] text-gray-400 tabular-nums">
+            <strong className="text-[var(--lu-accent)]">{Object.values(workoutsByDay).filter((w) => w.length > 0).length}</strong> de 7 dias treinados
           </span>
         </div>
 
@@ -135,19 +140,19 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
               <button
                 key={dia}
                 onClick={() => setSelectedDayIndex(idx)}
-                className={`relative flex flex-col items-center justify-center py-2.5 rounded-xl text-xs font-bold transition-all ${
+                className={`relative flex flex-col items-center justify-center py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   isSelected
-                    ? 'bg-[#78FF00] text-[#0A0D0B] shadow-[0_0_15px_rgba(120,255,0,0.4)] scale-105 z-10'
+                    ? 'bg-[var(--lu-accent)] text-[var(--lu-on-accent)] shadow-[0_0_16px_var(--lu-glow)] scale-105 z-10'
                     : hasWorkout
-                    ? 'bg-[#1F2E22] text-[#78FF00] border border-[#78FF00]/40'
-                    : 'bg-[#1A231C] text-gray-500 border border-gray-800'
+                    ? 'bg-[var(--lu-accent-15)] text-[var(--lu-accent)] border border-[var(--lu-accent-40)]'
+                    : 'bg-[var(--lu-surface-alt)] text-gray-500 border border-gray-800 hover:border-[var(--lu-accent-30)]'
                 }`}
               >
                 <span>{dia}</span>
                 {hasWorkout ? (
-                  <CheckCircle className={`w-3.5 h-3.5 mt-1 ${isSelected ? 'text-[#0A0D0B]' : 'text-[#78FF00]'}`} />
+                  <CheckCircle className={`w-3.5 h-3.5 mt-1 ${isSelected ? 'text-[var(--lu-on-accent)]' : 'text-[var(--lu-accent)]'}`} />
                 ) : (
-                  <div className={`w-1.5 h-1.5 rounded-full mt-2 ${isSelected ? 'bg-[#0A0D0B]' : 'bg-gray-700'}`} />
+                  <div className={`w-1.5 h-1.5 rounded-full mt-2 ${isSelected ? 'bg-[var(--lu-on-accent)]' : 'bg-gray-700'}`} />
                 )}
               </button>
             );
@@ -157,7 +162,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         {/* Selected Day Workout Details */}
         <div className="pt-2 border-t border-gray-800/80">
           <div className="text-xs font-bold text-gray-300 mb-2">
-            Treinos em <span className="text-[#78FF00]">{DIAS_SEMANA_FULL[selectedDayIndex]}</span>:
+            Treinos em <span className="text-[var(--lu-accent)]">{DIAS_SEMANA_FULL[selectedDayIndex]}</span>:
           </div>
 
           {selectedDayWorkouts.length > 0 ? (
@@ -165,35 +170,35 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
               {selectedDayWorkouts.map((workout) => (
                 <div
                   key={workout.id}
-                  className="bg-[#1A231C] border border-[#78FF00]/20 p-3 rounded-xl flex items-center justify-between"
+                  className="bg-[var(--lu-surface-alt)] border border-[var(--lu-accent-20)] p-3 rounded-xl flex items-center justify-between"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-[#78FF00]/10 text-[#78FF00]">
+                    <div className="p-2 rounded-lg bg-[var(--lu-accent-15)] text-[var(--lu-accent)]">
                       {workout.tipo === 'gps' ? <Navigation className="w-4 h-4" /> : <Dumbbell className="w-4 h-4" />}
                     </div>
                     <div>
                       <h4 className="text-xs font-bold text-white">{workout.tituloTreino}</h4>
-                      <div className="flex items-center gap-2 text-[10px] text-gray-400 mt-0.5">
+                      <div className="flex items-center gap-2 text-[10px] text-gray-400 mt-0.5 tabular-nums">
                         <span>{Math.round(workout.duracaoSegundos / 60)} min</span>
-                        <span>•</span>
-                        <span>{workout.caloriasQueimadas} kcal</span>
+                        <span>·</span>
+                        <span className="text-[var(--lu-accent)] font-semibold">{workout.caloriasQueimadas} kcal</span>
                         {workout.distanciaKm && (
                           <>
-                            <span>•</span>
-                            <span className="text-[#78FF00] font-semibold">{workout.distanciaKm} km</span>
+                            <span>·</span>
+                            <span className="text-[var(--lu-accent)] font-semibold">{workout.distanciaKm} km</span>
                           </>
                         )}
                       </div>
                     </div>
                   </div>
-                  <span className="text-[10px] bg-[#78FF00]/20 text-[#78FF00] font-bold px-2 py-1 rounded-full uppercase">
+                  <span className="text-[10px] text-[var(--lu-accent)] font-bold uppercase tracking-wider">
                     Concluído
                   </span>
                 </div>
               ))}
             </div>
           ) : (
-            <div className="p-3 bg-[#1A231C]/60 border border-dashed border-gray-800 rounded-xl text-center text-xs text-gray-500">
+            <div className="p-3 bg-[var(--lu-surface-alt)]/60 border border-dashed border-gray-800 rounded-xl text-center text-xs text-gray-500">
               Nenhum treino registrado nesta {DIAS_SEMANA_FULL[selectedDayIndex].toLowerCase()}.
             </div>
           )}
@@ -203,27 +208,27 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       {/* Quick Launch Action Cards */}
       <div className="space-y-2">
         <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider">Ações Rápidas</h3>
-        
+
         <div className="grid grid-cols-2 gap-3">
           <button
             onClick={onNavigateToRecord}
-            className="p-4 bg-[#121814] hover:bg-[#1a231c] border border-gray-800 hover:border-[#78FF00] rounded-2xl text-left transition-all group"
+            className="p-4 bg-[var(--lu-surface)] hover:bg-[var(--lu-surface-hover)] border border-gray-800 hover:border-[var(--lu-accent)] rounded-2xl text-left transition-all group cursor-pointer"
           >
-            <div className="w-9 h-9 rounded-xl bg-[#78FF00]/10 text-[#78FF00] flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+            <div className="w-9 h-9 rounded-xl bg-[var(--lu-accent-10)] text-[var(--lu-accent)] border border-[var(--lu-accent-30)] flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
               <Navigation className="w-5 h-5" />
             </div>
-            <h4 className="font-bold text-sm text-white group-hover:text-[#78FF00]">Gravar GPS</h4>
+            <h4 className="font-bold text-sm text-white group-hover:text-[var(--lu-accent)]">Gravar GPS</h4>
             <p className="text-[11px] text-gray-400 mt-0.5">Correr, caminhar ou pedalar</p>
           </button>
 
           <button
             onClick={onNavigateToBuilder}
-            className="p-4 bg-[#121814] hover:bg-[#1a231c] border border-gray-800 hover:border-[#78FF00] rounded-2xl text-left transition-all group"
+            className="p-4 bg-[var(--lu-surface)] hover:bg-[var(--lu-surface-hover)] border border-gray-800 hover:border-[var(--lu-accent)] rounded-2xl text-left transition-all group cursor-pointer"
           >
-            <div className="w-9 h-9 rounded-xl bg-[#78FF00]/10 text-[#78FF00] flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+            <div className="w-9 h-9 rounded-xl bg-[var(--lu-accent-15)] text-[var(--lu-accent)] border border-[var(--lu-accent-30)] flex items-center justify-center mb-3 group-hover:scale-110 transition-transform shadow-[0_0_12px_var(--lu-glow-soft)]">
               <Dumbbell className="w-5 h-5" />
             </div>
-            <h4 className="font-bold text-sm text-white group-hover:text-[#78FF00]">Meus Treinos</h4>
+            <h4 className="font-bold text-sm text-white group-hover:text-[var(--lu-accent)]">Meus Treinos</h4>
             <p className="text-[11px] text-gray-400 mt-0.5">Montar, editar e iniciar</p>
           </button>
         </div>

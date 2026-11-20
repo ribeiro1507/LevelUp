@@ -77,18 +77,18 @@ export const InstallAppModal: React.FC<InstallAppModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-end sm:items-center justify-center p-0 sm:p-4 animate-fadeIn">
-      <div className="w-full max-w-md bg-[#121814] border border-[#78FF00]/40 rounded-t-3xl sm:rounded-3xl p-5 sm:p-6 shadow-[0_0_50px_rgba(120,255,0,0.25)] space-y-4 text-white relative max-h-[92vh] overflow-y-auto animate-slideUp">
+      <div className="w-full max-w-md bg-[var(--lu-surface)] border border-[var(--lu-accent-40)] rounded-t-3xl sm:rounded-3xl p-5 sm:p-6 shadow-[0_0_50px_var(--lu-glow-soft)] space-y-4 text-white relative max-h-[92vh] overflow-y-auto animate-slideUp">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-gray-800 pb-3">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-[#78FF00]/20 border border-[#78FF00]/40 flex items-center justify-center text-[#78FF00]">
+            <div className="w-9 h-9 rounded-xl bg-[var(--lu-accent-20)] border border-[var(--lu-accent-40)] flex items-center justify-center text-[var(--lu-accent)]">
               <Download className="w-5 h-5" />
             </div>
             <div>
               <h3 className="text-base font-black text-white flex items-center gap-1.5">
                 <span>Baixar no Celular</span>
-                <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-[#78FF00] text-black">
-                  App PWA
+                <span className="text-[10px] uppercase font-bold tracking-wider text-[var(--lu-accent)]">
+                  · App PWA
                 </span>
               </h3>
               <p className="text-xs text-gray-400">
@@ -99,15 +99,15 @@ export const InstallAppModal: React.FC<InstallAppModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 text-gray-400 hover:text-white rounded-lg bg-gray-800/60 hover:bg-gray-800 transition-colors"
+            className="p-1.5 text-gray-400 hover:text-white rounded-lg bg-gray-800/60 hover:bg-gray-800 transition-colors cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* QR Code Container */}
-        <div className="flex flex-col items-center justify-center p-4 bg-[#1A231C] border border-gray-800 rounded-2xl text-center space-y-3">
-          <div className="flex items-center gap-1.5 text-xs font-bold text-[#78FF00]">
+        <div className="flex flex-col items-center justify-center p-4 bg-[var(--lu-surface-alt)] border border-[var(--lu-accent-30)] rounded-2xl text-center space-y-3">
+          <div className="flex items-center gap-1.5 text-xs font-bold text-[var(--lu-accent)]">
             <QrCode className="w-4 h-4" />
             <span>Aponte a câmera do celular para escanear</span>
           </div>
@@ -136,14 +136,14 @@ export const InstallAppModal: React.FC<InstallAppModalProps> = ({
           <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">
             Ou acesse pelo link direto:
           </label>
-          <div className="flex items-center gap-2 bg-[#0A0D0B] border border-gray-800 rounded-xl p-2 pl-3">
+          <div className="flex items-center gap-2 bg-[var(--lu-bg)] border border-gray-800 rounded-xl p-2 pl-3">
             <span className="text-xs text-gray-300 truncate flex-1 font-mono select-all">
               {appUrl}
             </span>
             <button
               type="button"
               onClick={handleCopyLink}
-              className="px-3 py-1.5 bg-[#78FF00] hover:bg-[#6be600] active:scale-95 text-black font-extrabold text-xs rounded-lg transition-all flex items-center gap-1.5 shrink-0"
+              className="px-3 py-1.5 bg-[var(--lu-accent)] hover:bg-[var(--lu-accent-hover)] active:scale-95 text-[var(--lu-on-accent)] font-extrabold text-xs rounded-lg transition-all flex items-center gap-1.5 shrink-0"
             >
               {copied ? (
                 <>
@@ -170,7 +170,7 @@ export const InstallAppModal: React.FC<InstallAppModalProps> = ({
           <button
             type="button"
             onClick={install}
-            className="w-full py-3 bg-[#78FF00] hover:bg-[#6be600] text-black font-black text-sm rounded-xl flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(120,255,0,0.3)] transition-all"
+            className="w-full py-3 bg-[var(--lu-accent)] hover:bg-[var(--lu-accent-hover)] text-[var(--lu-on-accent)] font-black text-sm rounded-xl flex items-center justify-center gap-2 shadow-[0_0_20px_var(--lu-glow)] transition-all"
           >
             <Smartphone className="w-4 h-4" />
             <span>Instalar Aplicativo Agora</span>
@@ -185,7 +185,7 @@ export const InstallAppModal: React.FC<InstallAppModalProps> = ({
               onClick={() => setActiveTab('android')}
               className={`flex-1 py-1.5 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
                 activeTab === 'android'
-                  ? 'bg-[#1A231C] text-[#78FF00] border border-[#78FF00]/40'
+                  ? 'bg-[var(--lu-surface-alt)] text-[var(--lu-accent)] border border-[var(--lu-accent-40)]'
                   : 'text-gray-400 hover:text-white'
               }`}
             >
@@ -197,7 +197,7 @@ export const InstallAppModal: React.FC<InstallAppModalProps> = ({
               onClick={() => setActiveTab('ios')}
               className={`flex-1 py-1.5 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
                 activeTab === 'ios'
-                  ? 'bg-[#1A231C] text-white border border-gray-600'
+                  ? 'bg-[var(--lu-surface-alt)] text-white border border-gray-600'
                   : 'text-gray-400 hover:text-white'
               }`}
             >
@@ -207,25 +207,25 @@ export const InstallAppModal: React.FC<InstallAppModalProps> = ({
           </div>
 
           {activeTab === 'android' ? (
-            <div className="p-3 bg-[#1A231C]/80 border border-gray-800/80 rounded-xl space-y-2 text-xs text-gray-300">
+            <div className="p-3 bg-[var(--lu-surface-alt)] border border-gray-800/80 rounded-xl space-y-2 text-xs text-gray-300">
               <p className="font-bold text-white flex items-center gap-1.5">
-                <span className="w-5 h-5 rounded-full bg-[#78FF00]/20 text-[#78FF00] flex items-center justify-center text-[11px]">1</span>
+                <span className="w-5 h-5 rounded-full bg-[var(--lu-accent-20)] text-[var(--lu-accent)] flex items-center justify-center text-[11px]">1</span>
                 Abra o link no <strong>Google Chrome</strong> do seu celular.
               </p>
               <p className="font-bold text-white flex items-center gap-1.5">
-                <span className="w-5 h-5 rounded-full bg-[#78FF00]/20 text-[#78FF00] flex items-center justify-center text-[11px]">2</span>
+                <span className="w-5 h-5 rounded-full bg-[var(--lu-accent-20)] text-[var(--lu-accent)] flex items-center justify-center text-[11px]">2</span>
                 Toque no menu de 3 pontinhos (<strong>⋮</strong>) no canto superior.
               </p>
               <p className="font-bold text-white flex items-center gap-1.5">
-                <span className="w-5 h-5 rounded-full bg-[#78FF00]/20 text-[#78FF00] flex items-center justify-center text-[11px]">3</span>
+                <span className="w-5 h-5 rounded-full bg-[var(--lu-accent-20)] text-[var(--lu-accent)] flex items-center justify-center text-[11px]">3</span>
                 Selecione <strong>"Instalar aplicativo"</strong> ou <strong>"Adicionar à tela inicial"</strong>.
               </p>
-              <p className="text-[11px] text-[#78FF00] pt-1">
+              <p className="text-[11px] text-[var(--lu-accent)] pt-1">
                 Pronto! O LevelUp funcionará em tela cheia com ícone próprio como um aplicativo da Play Store.
               </p>
             </div>
           ) : (
-            <div className="p-3 bg-[#1A231C]/80 border border-gray-800/80 rounded-xl space-y-2 text-xs text-gray-300">
+            <div className="p-3 bg-[var(--lu-surface-alt)] border border-gray-800/80 rounded-xl space-y-2 text-xs text-gray-300">
               <p className="font-bold text-white flex items-center gap-1.5">
                 <span className="w-5 h-5 rounded-full bg-white/20 text-white flex items-center justify-center text-[11px]">1</span>
                 Abra o link no navegador <strong>Safari</strong> do iPhone.

@@ -47,10 +47,10 @@ export const DirectApkDownloadButton: React.FC<DirectApkDownloadButtonProps> = (
   return (
     <>
       {variant === 'banner' ? (
-        <div className={`p-4 bg-gradient-to-r from-[#121814] to-[#1A231C] border border-[#78FF00]/40 rounded-2xl shadow-[0_0_20px_rgba(120,255,0,0.15)] space-y-3 ${className}`}>
+        <div className={`p-4 bg-gradient-to-r from-[var(--lu-surface)] to-[var(--lu-surface-alt)] border border-[var(--lu-accent-40)] rounded-2xl shadow-[0_0_20px_var(--lu-glow-soft)] space-y-3 ${className}`}>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-xl bg-[#78FF00]/20 text-[#78FF00] flex items-center justify-center">
+              <div className="w-8 h-8 rounded-xl bg-[var(--lu-accent-20)] text-[var(--lu-accent)] flex items-center justify-center">
                 <Smartphone className="w-4 h-4" />
               </div>
               <div>
@@ -58,7 +58,7 @@ export const DirectApkDownloadButton: React.FC<DirectApkDownloadButtonProps> = (
                 <p className="text-[11px] text-gray-400">Download direto do pacote APK Android</p>
               </div>
             </div>
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#78FF00]/20 text-[#78FF00] border border-[#78FF00]/30 uppercase">
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[var(--lu-accent-20)] text-[var(--lu-accent)] border border-[var(--lu-accent-30)] uppercase">
               APK v1.0
             </span>
           </div>
@@ -67,9 +67,9 @@ export const DirectApkDownloadButton: React.FC<DirectApkDownloadButtonProps> = (
             href={apkUrl}
             download={filename}
             onClick={handleClick}
-            className="w-full flex items-center justify-center gap-2.5 py-3 px-4 bg-[#78FF00] hover:bg-[#6be600] active:scale-[0.98] text-[#0A0D0B] font-black text-sm uppercase tracking-wider rounded-xl transition-all shadow-[0_0_20px_rgba(120,255,0,0.3)] select-none no-underline cursor-pointer"
+            className="w-full flex items-center justify-center gap-2.5 py-3 px-4 bg-[var(--lu-accent)] hover:bg-[var(--lu-accent-hover)] active:scale-[0.98] text-[var(--lu-on-accent)] font-black text-sm uppercase tracking-wider rounded-xl transition-all shadow-[0_0_20px_var(--lu-glow)] select-none no-underline cursor-pointer"
           >
-            <Download className="w-4 h-4 text-[#0A0D0B] stroke-[2.5]" />
+            <Download className="w-4 h-4 text-[var(--lu-on-accent)] stroke-[2.5]" />
             <span>{label}</span>
           </a>
         </div>
@@ -78,9 +78,9 @@ export const DirectApkDownloadButton: React.FC<DirectApkDownloadButtonProps> = (
           href={apkUrl}
           download={filename}
           onClick={handleClick}
-          className={`inline-flex items-center justify-center gap-2 py-2.5 px-5 bg-[#78FF00] hover:bg-[#6be600] active:scale-95 text-[#0A0D0B] font-black text-xs uppercase tracking-wide rounded-xl transition-all shadow-[0_0_15px_rgba(120,255,0,0.3)] select-none no-underline cursor-pointer ${className}`}
+          className={`inline-flex items-center justify-center gap-2 py-2.5 px-5 bg-[var(--lu-accent)] hover:bg-[var(--lu-accent-hover)] active:scale-95 text-[var(--lu-on-accent)] font-black text-xs uppercase tracking-wide rounded-xl transition-all shadow-[0_0_15px_var(--lu-glow)] select-none no-underline cursor-pointer ${className}`}
         >
-          <Download className="w-4 h-4 text-[#0A0D0B] stroke-[2.5]" />
+          <Download className="w-4 h-4 text-[var(--lu-on-accent)] stroke-[2.5]" />
           <span>{label}</span>
         </a>
       ) : (
@@ -88,9 +88,9 @@ export const DirectApkDownloadButton: React.FC<DirectApkDownloadButtonProps> = (
           href={apkUrl}
           download={filename}
           onClick={handleClick}
-          className={`w-full flex items-center justify-center gap-2.5 py-3.5 px-6 bg-[#78FF00] hover:bg-[#6be600] active:scale-[0.98] text-[#0A0D0B] font-black text-sm uppercase tracking-wider rounded-2xl transition-all shadow-[0_0_25px_rgba(120,255,0,0.35)] hover:shadow-[0_0_35px_rgba(120,255,0,0.5)] select-none no-underline cursor-pointer ${className}`}
+          className={`w-full flex items-center justify-center gap-2.5 py-3.5 px-6 bg-[var(--lu-accent)] hover:bg-[var(--lu-accent-hover)] active:scale-[0.98] text-[var(--lu-on-accent)] font-black text-sm uppercase tracking-wider rounded-2xl transition-all shadow-[0_0_25px_var(--lu-glow)] hover:shadow-[0_0_35px_var(--lu-glow)] select-none no-underline cursor-pointer ${className}`}
         >
-          <Download className="w-5 h-5 text-[#0A0D0B] stroke-[2.5]" />
+          <Download className="w-5 h-5 text-[var(--lu-on-accent)] stroke-[2.5]" />
           <span>{label}</span>
         </a>
       )}
@@ -98,7 +98,7 @@ export const DirectApkDownloadButton: React.FC<DirectApkDownloadButtonProps> = (
       {/* Alerta amigável no caso de acesso via iPhone / iPad (iOS) */}
       {showIOSAlert && (
         <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4 animate-fadeIn">
-          <div className="w-full max-w-sm bg-[#121814] border border-[#78FF00]/50 rounded-3xl p-5 shadow-[0_0_35px_rgba(120,255,0,0.25)] space-y-4 text-white animate-scaleUp">
+          <div className="w-full max-w-sm bg-[var(--lu-surface)] border border-[var(--lu-accent-50)] rounded-3xl p-5 shadow-[0_0_35px_var(--lu-glow)] space-y-4 text-white animate-scaleUp">
             <div className="flex items-center justify-between border-b border-gray-800 pb-3">
               <div className="flex items-center gap-2.5">
                 <div className="w-9 h-9 rounded-xl bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 flex items-center justify-center">
@@ -118,7 +118,7 @@ export const DirectApkDownloadButton: React.FC<DirectApkDownloadButtonProps> = (
               </button>
             </div>
 
-            <div className="p-3 bg-[#1A231C] border border-gray-800 rounded-xl space-y-2 text-xs text-gray-300">
+            <div className="p-3 bg-[var(--lu-surface-alt)] border border-gray-800 rounded-xl space-y-2 text-xs text-gray-300">
               <p className="font-semibold text-white">
                 O arquivo <strong>.APK</strong> é um pacote de instalação nativo exclusivo para sistemas <strong>Android</strong>.
               </p>
@@ -133,7 +133,7 @@ export const DirectApkDownloadButton: React.FC<DirectApkDownloadButtonProps> = (
             <button
               type="button"
               onClick={() => setShowIOSAlert(false)}
-              className="w-full py-2.5 bg-[#78FF00] hover:bg-[#6be600] text-black font-black text-xs uppercase tracking-wider rounded-xl transition-all"
+              className="w-full py-2.5 bg-[var(--lu-accent)] hover:bg-[var(--lu-accent-hover)] text-[var(--lu-on-accent)] font-black text-xs uppercase tracking-wider rounded-xl transition-all"
             >
               Entendido
             </button>

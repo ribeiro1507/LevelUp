@@ -132,7 +132,7 @@ export async function detectDeviceGoogleAccounts(): Promise<DeviceSocialAccount[
           provider: 'google',
           name: 'Carlos Silva',
           email: 'carlos.silva.atleta@gmail.com',
-          avatarColor: 'bg-[#78FF00] text-black font-extrabold',
+          avatarColor: 'bg-[var(--lu-accent)] text-[var(--lu-on-accent)] font-extrabold',
         }
       ];
       localStorage.setItem(STORAGE_GOOGLE_ACCOUNTS_KEY, JSON.stringify(defaultAccounts));

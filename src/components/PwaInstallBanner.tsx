@@ -131,21 +131,20 @@ export const PwaInstallBanner: React.FC<PwaInstallBannerProps> = ({
         aria-label="Instalar LevelUp na tela inicial"
         className="fixed bottom-3 inset-x-3 sm:bottom-4 sm:inset-x-auto sm:left-1/2 sm:-translate-x-1/2 sm:w-full sm:max-w-md z-50 animate-slideUp"
       >
-        <div className="bg-[#0A0D0B] border border-[#78FF00]/50 rounded-2xl p-3.5 sm:p-4 shadow-[0_0_30px_rgba(120,255,0,0.25)] backdrop-blur-md flex flex-col gap-3">
+        <div className="bg-[var(--lu-bg)] border border-[var(--lu-accent-40)] rounded-2xl p-3.5 sm:p-4 shadow-[0_0_30px_var(--lu-glow-soft)] backdrop-blur-md flex flex-col gap-3">
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-3 flex-1 min-w-0">
-              {/* Ícone com Glow Verde Neon */}
-              <div className="w-10 h-10 rounded-xl bg-[#78FF00]/15 border border-[#78FF00]/40 flex items-center justify-center text-[#78FF00] shrink-0 shadow-[0_0_15px_rgba(120,255,0,0.2)]">
-                <Smartphone className="w-5 h-5 text-[#78FF00]" />
+              {/* Ícone com Glow Dinâmico */}
+              <div className="w-10 h-10 rounded-xl bg-[var(--lu-accent-15)] border border-[var(--lu-accent-40)] flex items-center justify-center text-[var(--lu-accent)] shrink-0 shadow-[0_0_15px_var(--lu-glow-soft)]">
+                <Smartphone className="w-5 h-5 text-[var(--lu-accent)]" />
               </div>
 
               {/* Textos Informativos */}
               <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-[10px] font-black uppercase px-1.5 py-0.2 rounded bg-[#78FF00] text-[#0A0D0B]">
-                    App Rápido
-                  </span>
-                  <span className="text-[10px] font-semibold text-gray-400">PWA Nativo</span>
+                <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider">
+                  <span className="text-[var(--lu-accent)]">App Rápido</span>
+                  <span className="text-gray-600">·</span>
+                  <span className="text-[var(--lu-accent-bright)]">PWA Nativo</span>
                 </div>
                 <h3 className="text-xs sm:text-sm font-extrabold text-white truncate tracking-tight">
                   Instale o LevelUp na sua tela inicial
@@ -161,7 +160,7 @@ export const PwaInstallBanner: React.FC<PwaInstallBannerProps> = ({
               type="button"
               onClick={handleDismiss}
               aria-label="Fechar aviso"
-              className="p-1.5 text-gray-400 hover:text-white rounded-lg bg-[#121814] hover:bg-gray-800 transition-colors shrink-0"
+              className="p-1.5 text-gray-400 hover:text-white rounded-lg bg-[var(--lu-surface)] hover:bg-gray-800 transition-colors shrink-0"
             >
               <X className="w-4 h-4" />
             </button>
@@ -172,9 +171,9 @@ export const PwaInstallBanner: React.FC<PwaInstallBannerProps> = ({
             <button
               type="button"
               onClick={handleInstallClick}
-              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 bg-[#78FF00] hover:bg-[#6be600] active:scale-[0.98] text-[#0A0D0B] font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-[0_0_15px_rgba(120,255,0,0.3)] cursor-pointer"
+              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 bg-[var(--lu-accent)] hover:bg-[var(--lu-accent-hover)] active:scale-[0.98] text-[var(--lu-on-accent)] font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-[0_0_15px_var(--lu-glow)] cursor-pointer"
             >
-              <Download className="w-4 h-4 text-[#0A0D0B] stroke-[2.5]" />
+              <Download className="w-4 h-4 text-[var(--lu-on-accent)] stroke-[2.5]" />
               <span>Baixar / Instalar</span>
             </button>
           </div>
@@ -184,10 +183,10 @@ export const PwaInstallBanner: React.FC<PwaInstallBannerProps> = ({
       {/* Modal Guiado para usuários de iPhone (Safari iOS) */}
       {showIOSInstructions && (
         <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4 animate-fadeIn">
-          <div className="w-full max-w-md bg-[#0A0D0B] border border-[#78FF00]/50 rounded-t-3xl sm:rounded-3xl p-5 sm:p-6 shadow-[0_0_40px_rgba(120,255,0,0.3)] space-y-4 text-white">
+          <div className="w-full max-w-md bg-[var(--lu-bg)] border border-[var(--lu-accent-50)] rounded-t-3xl sm:rounded-3xl p-5 sm:p-6 shadow-[0_0_40px_var(--lu-glow)] space-y-4 text-white">
             <div className="flex items-center justify-between border-b border-gray-800 pb-3">
               <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-[#78FF00]/20 border border-[#78FF00]/40 flex items-center justify-center text-[#78FF00]">
+                <div className="w-9 h-9 rounded-xl bg-[var(--lu-accent-20)] border border-[var(--lu-accent-40)] flex items-center justify-center text-[var(--lu-accent)]">
                   <Share2 className="w-5 h-5" />
                 </div>
                 <div>
@@ -208,8 +207,8 @@ export const PwaInstallBanner: React.FC<PwaInstallBannerProps> = ({
             </div>
 
             <div className="space-y-2.5 text-xs text-gray-300">
-              <div className="p-3 bg-[#121814] border border-gray-800 rounded-xl flex items-start gap-2.5">
-                <span className="w-5 h-5 rounded-full bg-[#78FF00] text-black font-black flex items-center justify-center text-[10px] shrink-0">
+              <div className="p-3 bg-[var(--lu-surface)] border border-gray-800 rounded-xl flex items-start gap-2.5">
+                <span className="w-5 h-5 rounded-full bg-[var(--lu-accent)] text-[var(--lu-on-accent)] font-black flex items-center justify-center text-[10px] shrink-0">
                   1
                 </span>
                 <p>
@@ -217,8 +216,8 @@ export const PwaInstallBanner: React.FC<PwaInstallBannerProps> = ({
                 </p>
               </div>
 
-              <div className="p-3 bg-[#121814] border border-gray-800 rounded-xl flex items-start gap-2.5">
-                <span className="w-5 h-5 rounded-full bg-[#78FF00] text-black font-black flex items-center justify-center text-[10px] shrink-0">
+              <div className="p-3 bg-[var(--lu-surface)] border border-gray-800 rounded-xl flex items-start gap-2.5">
+                <span className="w-5 h-5 rounded-full bg-[var(--lu-accent)] text-[var(--lu-on-accent)] font-black flex items-center justify-center text-[10px] shrink-0">
                   2
                 </span>
                 <p>
@@ -226,8 +225,8 @@ export const PwaInstallBanner: React.FC<PwaInstallBannerProps> = ({
                 </p>
               </div>
 
-              <div className="p-3 bg-[#121814] border border-gray-800 rounded-xl flex items-start gap-2.5">
-                <span className="w-5 h-5 rounded-full bg-[#78FF00] text-black font-black flex items-center justify-center text-[10px] shrink-0">
+              <div className="p-3 bg-[var(--lu-surface)] border border-gray-800 rounded-xl flex items-start gap-2.5">
+                <span className="w-5 h-5 rounded-full bg-[var(--lu-accent)] text-[var(--lu-on-accent)] font-black flex items-center justify-center text-[10px] shrink-0">
                   3
                 </span>
                 <p>
@@ -242,7 +241,7 @@ export const PwaInstallBanner: React.FC<PwaInstallBannerProps> = ({
                 setShowIOSInstructions(false);
                 setIsVisible(false);
               }}
-              className="w-full py-2.5 bg-[#78FF00] hover:bg-[#6be600] text-black font-black text-xs uppercase tracking-wider rounded-xl transition-all"
+              className="w-full py-2.5 bg-[var(--lu-accent)] hover:bg-[var(--lu-accent-hover)] text-[var(--lu-on-accent)] font-black text-xs uppercase tracking-wider rounded-xl transition-all"
             >
               Entendido
             </button>

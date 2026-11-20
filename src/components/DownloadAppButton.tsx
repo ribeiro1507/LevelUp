@@ -270,7 +270,7 @@ export const DownloadAppButton: React.FC<DownloadAppButtonProps> = ({
           <button
             type="button"
             onClick={handleClick}
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#78FF00] hover:bg-[#6be600] active:scale-95 text-black font-extrabold text-xs transition-all shadow-[0_0_15px_rgba(120,255,0,0.25)] ${className}`}
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--lu-accent)] hover:bg-[var(--lu-accent-hover)] active:scale-95 text-[var(--lu-on-accent)] font-extrabold text-xs transition-all shadow-[0_0_15px_var(--lu-glow)] ${className}`}
           >
             <Download className="w-3.5 h-3.5 shrink-0" />
             <span>{label}</span>
@@ -282,7 +282,7 @@ export const DownloadAppButton: React.FC<DownloadAppButtonProps> = ({
           <button
             type="button"
             onClick={handleClick}
-            className={`flex items-center gap-1.5 px-2.5 py-1 bg-[#78FF00]/15 hover:bg-[#78FF00]/25 text-[#78FF00] border border-[#78FF00]/40 rounded-xl text-xs font-bold transition-all active:scale-95 shadow-[0_0_10px_rgba(120,255,0,0.15)] ${className}`}
+            className={`flex items-center gap-1.5 px-2.5 py-1 bg-[var(--lu-accent-15)] hover:bg-[var(--lu-accent-20)] text-[var(--lu-accent)] border border-[var(--lu-accent-40)] rounded-xl text-xs font-bold transition-all active:scale-95 shadow-[0_0_10px_var(--lu-glow-soft)] ${className}`}
           >
             <Download className="w-3.5 h-3.5" />
             <span>{label}</span>
@@ -294,17 +294,17 @@ export const DownloadAppButton: React.FC<DownloadAppButtonProps> = ({
           <button
             type="button"
             onClick={handleClick}
-            className={`w-full flex items-center justify-between p-3.5 bg-gradient-to-r from-[#121814] to-[#1A231C] hover:from-[#1a241d] hover:to-[#223025] border border-[#78FF00]/40 hover:border-[#78FF00] rounded-2xl text-left transition-all active:scale-[0.99] shadow-[0_0_25px_rgba(120,255,0,0.15)] group ${className}`}
+            className={`w-full flex items-center justify-between p-3.5 bg-gradient-to-r from-[var(--lu-surface)] to-[var(--lu-surface-alt)] hover:from-[var(--lu-surface-alt)] hover:to-[var(--lu-surface-hover)] border border-[var(--lu-accent-40)] hover:border-[var(--lu-accent)] rounded-2xl text-left transition-all active:scale-[0.99] shadow-[0_0_25px_var(--lu-glow-soft)] group ${className}`}
           >
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[#78FF00]/20 text-[#78FF00] border border-[#78FF00]/40 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+              <div className="w-10 h-10 rounded-xl bg-[var(--lu-accent-20)] text-[var(--lu-accent)] border border-[var(--lu-accent-40)] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                 <Download className="w-5 h-5" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-black text-white">{label}</span>
                   {showDetectedBadge && (
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#78FF00]/20 text-[#78FF00] border border-[#78FF00]/30 uppercase">
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[var(--lu-accent-20)] text-[var(--lu-accent)] border border-[var(--lu-accent-30)] uppercase">
                       {platform === 'android'
                         ? 'Android'
                         : platform === 'ios'
@@ -316,7 +316,7 @@ export const DownloadAppButton: React.FC<DownloadAppButtonProps> = ({
                 <p className="text-xs text-gray-400">{displaySubLabel}</p>
               </div>
             </div>
-            <ChevronRight className="w-5 h-5 text-gray-500 group-hover:text-[#78FF00] transition-colors" />
+            <ChevronRight className="w-5 h-5 text-gray-500 group-hover:text-[var(--lu-accent)] transition-colors" />
           </button>
         );
 
@@ -326,16 +326,16 @@ export const DownloadAppButton: React.FC<DownloadAppButtonProps> = ({
           <button
             type="button"
             onClick={handleClick}
-            className={`relative group inline-flex items-center gap-3 px-5 py-3 rounded-2xl bg-gradient-to-r from-[#78FF00] to-[#5ec900] hover:from-[#89ff1e] hover:to-[#6be600] active:scale-95 text-black font-black transition-all duration-200 shadow-[0_0_30px_rgba(120,255,0,0.35)] hover:shadow-[0_0_40px_rgba(120,255,0,0.5)] ${className}`}
+            className={`relative group inline-flex items-center gap-3 px-5 py-3 rounded-2xl bg-gradient-to-r from-[var(--lu-accent)] to-[var(--lu-accent-hover)] hover:from-[var(--lu-accent-bright)] hover:to-[var(--lu-accent)] active:scale-95 text-[var(--lu-on-accent)] font-black transition-all duration-200 shadow-[0_0_30px_var(--lu-glow)] hover:shadow-[0_0_40px_var(--lu-glow)] ${className}`}
           >
             <div className="w-8 h-8 rounded-xl bg-black/15 flex items-center justify-center shrink-0">
-              <Download className="w-5 h-5 text-black animate-bounce group-hover:animate-none" />
+              <Download className="w-5 h-5 text-[var(--lu-on-accent)] animate-bounce group-hover:animate-none" />
             </div>
             <div className="text-left leading-tight">
               <div className="flex items-center gap-2">
                 <span className="text-sm font-black tracking-tight">{label}</span>
                 {showDetectedBadge && (
-                  <span className="text-[9px] uppercase font-black px-1.5 py-0.5 rounded-md bg-black/20 text-black">
+                  <span className="text-[9px] uppercase font-black px-1.5 py-0.5 rounded-md bg-black/20 text-[var(--lu-on-accent)]">
                     {platform === 'android'
                       ? 'Android'
                       : platform === 'ios'
@@ -443,11 +443,11 @@ const DesktopQrModal: React.FC<DesktopQrModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 animate-fadeIn">
-      <div className="w-full max-w-md bg-[#121814] border border-[#78FF00]/40 rounded-3xl p-6 shadow-[0_0_50px_rgba(120,255,0,0.25)] space-y-4 text-white relative max-h-[92vh] overflow-y-auto">
+      <div className="w-full max-w-md bg-[var(--lu-surface)] border border-[var(--lu-accent-40)] rounded-3xl p-6 shadow-[0_0_50px_var(--lu-glow)] space-y-4 text-white relative max-h-[92vh] overflow-y-auto">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-gray-800 pb-3">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-[#78FF00]/20 border border-[#78FF00]/40 flex items-center justify-center text-[#78FF00]">
+            <div className="w-9 h-9 rounded-xl bg-[var(--lu-accent-20)] border border-[var(--lu-accent-40)] flex items-center justify-center text-[var(--lu-accent)]">
               <Smartphone className="w-5 h-5" />
             </div>
             <div>
@@ -465,8 +465,8 @@ const DesktopQrModal: React.FC<DesktopQrModalProps> = ({
         </div>
 
         {/* QR Code */}
-        <div className="flex flex-col items-center justify-center p-4 bg-[#1A231C] border border-gray-800 rounded-2xl text-center space-y-3">
-          <div className="flex items-center gap-1.5 text-xs font-bold text-[#78FF00]">
+        <div className="flex flex-col items-center justify-center p-4 bg-[var(--lu-surface-alt)] border border-gray-800 rounded-2xl text-center space-y-3">
+          <div className="flex items-center gap-1.5 text-xs font-bold text-[var(--lu-accent)]">
             <QrCode className="w-4 h-4" />
             <span>Aponte a câmera para abrir no celular</span>
           </div>
@@ -494,14 +494,14 @@ const DesktopQrModal: React.FC<DesktopQrModalProps> = ({
           <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">
             Ou abra o link diretamente:
           </label>
-          <div className="flex items-center gap-2 bg-[#0A0D0B] border border-gray-800 rounded-xl p-2 pl-3">
+          <div className="flex items-center gap-2 bg-[var(--lu-bg)] border border-gray-800 rounded-xl p-2 pl-3">
             <span className="text-xs text-gray-300 truncate flex-1 font-mono select-all">
               {appUrl}
             </span>
             <button
               type="button"
               onClick={handleCopy}
-              className="px-3 py-1.5 bg-[#78FF00] hover:bg-[#6be600] active:scale-95 text-black font-black text-xs rounded-lg transition-all flex items-center gap-1.5 shrink-0"
+              className="px-3 py-1.5 bg-[var(--lu-accent)] hover:bg-[var(--lu-accent-hover)] active:scale-95 text-[var(--lu-on-accent)] font-black text-xs rounded-lg transition-all flex items-center gap-1.5 shrink-0"
             >
               {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
               <span>{copied ? 'Copiado!' : 'Copiar'}</span>
@@ -516,9 +516,9 @@ const DesktopQrModal: React.FC<DesktopQrModalProps> = ({
             <a
               href={apkUrl}
               download="levelup.apk"
-              className="flex items-center justify-center gap-2 p-2.5 rounded-xl bg-[#1A231C] hover:bg-[#233026] border border-gray-800 hover:border-[#78FF00]/40 text-xs font-bold text-gray-200 transition-all text-center"
+              className="flex items-center justify-center gap-2 p-2.5 rounded-xl bg-[var(--lu-surface-alt)] hover:bg-[var(--lu-surface-hover)] border border-gray-800 hover:border-[var(--lu-accent-40)] text-xs font-bold text-gray-200 transition-all text-center"
             >
-              <ArrowDownToLine className="w-4 h-4 text-[#78FF00]" />
+              <ArrowDownToLine className="w-4 h-4 text-[var(--lu-accent)]" />
               <span>Baixar APK</span>
             </a>
 
@@ -527,7 +527,7 @@ const DesktopQrModal: React.FC<DesktopQrModalProps> = ({
                 href={appStoreUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 p-2.5 rounded-xl bg-[#1A231C] hover:bg-[#233026] border border-gray-800 hover:border-gray-600 text-xs font-bold text-gray-200 transition-all text-center"
+                className="flex items-center justify-center gap-2 p-2.5 rounded-xl bg-[var(--lu-surface-alt)] hover:bg-[var(--lu-surface-hover)] border border-gray-800 hover:border-gray-600 text-xs font-bold text-gray-200 transition-all text-center"
               >
                 <Apple className="w-4 h-4 text-white" />
                 <span>App Store</span>
@@ -536,7 +536,7 @@ const DesktopQrModal: React.FC<DesktopQrModalProps> = ({
               <button
                 type="button"
                 onClick={handleCopy}
-                className="flex items-center justify-center gap-2 p-2.5 rounded-xl bg-[#1A231C] hover:bg-[#233026] border border-gray-800 hover:border-gray-600 text-xs font-bold text-gray-200 transition-all text-center"
+                className="flex items-center justify-center gap-2 p-2.5 rounded-xl bg-[var(--lu-surface-alt)] hover:bg-[var(--lu-surface-hover)] border border-gray-800 hover:border-gray-600 text-xs font-bold text-gray-200 transition-all text-center"
               >
                 <Apple className="w-4 h-4 text-white" />
                 <span>iOS (PWA)</span>
@@ -583,10 +583,10 @@ const AndroidInstallSheet: React.FC<AndroidInstallSheetProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4 animate-fadeIn">
-      <div className="w-full max-w-md bg-[#121814] border border-[#78FF00]/40 rounded-t-3xl sm:rounded-3xl p-5 sm:p-6 shadow-[0_0_40px_rgba(120,255,0,0.25)] space-y-4 text-white">
+      <div className="w-full max-w-md bg-[var(--lu-surface)] border border-[var(--lu-accent-40)] rounded-t-3xl sm:rounded-3xl p-5 sm:p-6 shadow-[0_0_40px_var(--lu-glow)] space-y-4 text-white">
         <div className="flex items-center justify-between border-b border-gray-800 pb-3">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-[#78FF00]/20 border border-[#78FF00]/40 flex items-center justify-center text-[#78FF00]">
+            <div className="w-9 h-9 rounded-xl bg-[var(--lu-accent-20)] border border-[var(--lu-accent-40)] flex items-center justify-center text-[var(--lu-accent)]">
               <Chrome className="w-5 h-5" />
             </div>
             <div>
@@ -611,16 +611,16 @@ const AndroidInstallSheet: React.FC<AndroidInstallSheetProps> = ({
               onTriggerPwa();
               onClose();
             }}
-            className="w-full p-3.5 rounded-2xl bg-gradient-to-r from-[#1A231C] to-[#141c16] hover:from-[#212f24] hover:to-[#1a261d] border border-[#78FF00]/50 flex items-center justify-between group transition-all text-left"
+            className="w-full p-3.5 rounded-2xl bg-gradient-to-r from-[var(--lu-surface-alt)] to-[var(--lu-surface)] hover:from-[var(--lu-surface-hover)] hover:to-[var(--lu-surface-alt)] border border-[var(--lu-accent-50)] flex items-center justify-between group transition-all text-left"
           >
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-[#78FF00] text-black flex items-center justify-center font-bold">
+              <div className="w-9 h-9 rounded-xl bg-[var(--lu-accent)] text-[var(--lu-on-accent)] flex items-center justify-center font-bold">
                 <Sparkles className="w-5 h-5" />
               </div>
               <div>
                 <div className="flex items-center gap-1.5">
                   <span className="text-xs font-black text-white">Instalar como App (PWA)</span>
-                  <span className="text-[9px] font-black uppercase px-1.5 py-0.5 rounded bg-[#78FF00] text-black">
+                  <span className="text-[9px] font-black uppercase px-1.5 py-0.5 rounded bg-[var(--lu-accent)] text-[var(--lu-on-accent)]">
                     Mais Rápido
                   </span>
                 </div>
@@ -629,7 +629,7 @@ const AndroidInstallSheet: React.FC<AndroidInstallSheetProps> = ({
                 </p>
               </div>
             </div>
-            <ChevronRight className="w-5 h-5 text-gray-500 group-hover:text-[#78FF00]" />
+            <ChevronRight className="w-5 h-5 text-gray-500 group-hover:text-[var(--lu-accent)]" />
           </button>
 
           {/* Opção 2: Download do APK */}
@@ -639,10 +639,10 @@ const AndroidInstallSheet: React.FC<AndroidInstallSheetProps> = ({
               onTriggerApk();
               onClose();
             }}
-            className="w-full p-3.5 rounded-2xl bg-[#1A231C] hover:bg-[#222f25] border border-gray-800 hover:border-[#78FF00]/40 flex items-center justify-between group transition-all text-left"
+            className="w-full p-3.5 rounded-2xl bg-[var(--lu-surface-alt)] hover:bg-[var(--lu-surface-hover)] border border-gray-800 hover:border-[var(--lu-accent-40)] flex items-center justify-between group transition-all text-left"
           >
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-gray-800 text-[#78FF00] flex items-center justify-center font-bold">
+              <div className="w-9 h-9 rounded-xl bg-gray-800 text-[var(--lu-accent)] flex items-center justify-center font-bold">
                 <ArrowDownToLine className="w-5 h-5" />
               </div>
               <div>
@@ -652,7 +652,7 @@ const AndroidInstallSheet: React.FC<AndroidInstallSheetProps> = ({
                 </p>
               </div>
             </div>
-            <ChevronRight className="w-5 h-5 text-gray-500 group-hover:text-[#78FF00]" />
+            <ChevronRight className="w-5 h-5 text-gray-500 group-hover:text-[var(--lu-accent)]" />
           </button>
 
           {/* Opção 3: Google Play (se configurado) */}
@@ -661,7 +661,7 @@ const AndroidInstallSheet: React.FC<AndroidInstallSheetProps> = ({
               href={playStoreUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full p-3.5 rounded-2xl bg-[#1A231C] hover:bg-[#222f25] border border-gray-800 flex items-center justify-between group transition-all text-left"
+              className="w-full p-3.5 rounded-2xl bg-[var(--lu-surface-alt)] hover:bg-[var(--lu-surface-hover)] border border-gray-800 flex items-center justify-between group transition-all text-left"
             >
               <div className="flex items-center gap-3">
                 <div className="w-9 h-9 rounded-xl bg-blue-900/30 text-blue-400 flex items-center justify-center font-bold">
@@ -707,7 +707,7 @@ const IosInstallSheet: React.FC<IosInstallSheetProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4 animate-fadeIn">
-      <div className="w-full max-w-md bg-[#121814] border border-gray-700/60 rounded-t-3xl sm:rounded-3xl p-5 sm:p-6 shadow-[0_0_40px_rgba(255,255,255,0.1)] space-y-4 text-white">
+      <div className="w-full max-w-md bg-[var(--lu-surface)] border border-gray-700/60 rounded-t-3xl sm:rounded-3xl p-5 sm:p-6 shadow-[0_0_40px_rgba(255,255,255,0.1)] space-y-4 text-white">
         <div className="flex items-center justify-between border-b border-gray-800 pb-3">
           <div className="flex items-center gap-2.5">
             <div className="w-9 h-9 rounded-xl bg-white/15 border border-white/30 flex items-center justify-center text-white">
@@ -728,7 +728,7 @@ const IosInstallSheet: React.FC<IosInstallSheetProps> = ({
         </div>
 
         {/* Passo a Passo Apple */}
-        <div className="p-3.5 bg-[#1A231C]/90 border border-gray-800 rounded-2xl space-y-3 text-xs">
+        <div className="p-3.5 bg-[var(--lu-surface-alt)] border border-gray-800 rounded-2xl space-y-3 text-xs">
           <div className="flex items-start gap-2.5">
             <span className="w-6 h-6 rounded-full bg-white/20 text-white font-bold flex items-center justify-center shrink-0 text-xs">
               1
@@ -743,7 +743,7 @@ const IosInstallSheet: React.FC<IosInstallSheetProps> = ({
               2
             </span>
             <p className="text-gray-200 leading-snug">
-              Toque no botão <strong>Compartilhar</strong> na barra inferior do Safari (ícone de quadrado com uma seta para cima <Share2 className="w-3.5 h-3.5 inline text-[#78FF00]" />).
+              Toque no botão <strong>Compartilhar</strong> na barra inferior do Safari (ícone de quadrado com uma seta para cima <Share2 className="w-3.5 h-3.5 inline text-[var(--lu-accent)]" />).
             </p>
           </div>
 

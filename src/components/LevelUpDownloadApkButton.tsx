@@ -73,9 +73,9 @@ export const LevelUpDownloadApkButton: React.FC<LevelUpDownloadApkButtonProps> =
   };
 
   const baseStyles =
-    'relative inline-flex items-center justify-center gap-2.5 bg-[#78FF00] hover:bg-[#8aff1e] active:scale-[0.98] text-[#000000] font-black tracking-wider uppercase rounded-2xl transition-all select-none cursor-pointer border-none';
+    'relative inline-flex items-center justify-center gap-2.5 bg-[var(--lu-accent)] hover:bg-[var(--lu-accent-bright)] active:scale-[0.98] text-[var(--lu-on-accent)] font-black tracking-wider uppercase rounded-2xl transition-all select-none cursor-pointer border-none';
   const shadowStyles =
-    'shadow-[0_0_15px_rgba(120,255,0,0.4)] hover:shadow-[0_0_25px_rgba(120,255,0,0.6)]';
+    'shadow-[0_0_15px_var(--lu-glow)] hover:shadow-[0_0_25px_var(--lu-glow)]';
   const sizeStyles = variant === 'full' ? 'w-full py-4 px-6 text-sm sm:text-base' : 'py-3 px-5 text-xs sm:text-sm';
 
   return (
@@ -89,12 +89,12 @@ export const LevelUpDownloadApkButton: React.FC<LevelUpDownloadApkButtonProps> =
       >
         {downloadSuccess ? (
           <>
-            <CheckCircle className="w-5 h-5 text-black stroke-[3]" />
+            <CheckCircle className="w-5 h-5 text-[var(--lu-on-accent)] stroke-[3]" />
             <span>Download Iniciado!</span>
           </>
         ) : (
           <>
-            <Download className={`w-5 h-5 text-black stroke-[3] ${downloading ? 'animate-bounce' : ''}`} />
+            <Download className={`w-5 h-5 text-[var(--lu-on-accent)] stroke-[3] ${downloading ? 'animate-bounce' : ''}`} />
             <span>{buttonText}</span>
           </>
         )}
@@ -102,7 +102,7 @@ export const LevelUpDownloadApkButton: React.FC<LevelUpDownloadApkButtonProps> =
 
       {/* Subtexto auxiliar informativo */}
       <span className="text-[11px] font-bold text-gray-400 flex items-center gap-1">
-        <Smartphone className="w-3.5 h-3.5 text-[#78FF00]" />
+        <Smartphone className="w-3.5 h-3.5 text-[var(--lu-accent)]" />
         Pacote Android Direto • Versão Oficial
       </span>
     </div>

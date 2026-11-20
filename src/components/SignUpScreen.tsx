@@ -35,6 +35,7 @@ import {
 import { LgpdModal } from './LgpdModal';
 import { LevelUpLogo } from './LevelUpLogo';
 import { DownloadAppButton } from './DownloadAppButton';
+import { ThemeToggleButton } from './ThemeToggleButton';
 
 interface SignUpScreenProps {
   initialMode?: 'login' | 'signup';
@@ -246,7 +247,8 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({
   };
 
   return (
-    <div className="min-h-full flex flex-col justify-between bg-[#0A0D0B] text-white p-5 sm:p-8 select-none relative">
+    <div className="min-h-full flex flex-col justify-between bg-[var(--lu-bg)] text-white p-5 sm:p-8 select-none relative overflow-hidden">
+      <div className="absolute -top-24 -right-24 w-56 h-56 bg-[var(--lu-accent-10)] rounded-full blur-3xl pointer-events-none" />
       <LgpdModal
         isOpen={isLgpdModalOpen}
         onClose={() => setIsLgpdModalOpen(false)}
@@ -261,7 +263,7 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({
       {/* ------------------------------------------------------------- */}
       {isGoogleModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4 animate-fadeIn">
-          <div className="w-full max-w-sm bg-[#121814] border border-[#78FF00]/40 rounded-t-3xl sm:rounded-3xl p-5 shadow-[0_0_50px_rgba(120,255,0,0.2)] space-y-4 text-white relative animate-slideUp">
+          <div className="w-full max-w-sm bg-[var(--lu-surface)] border border-[var(--lu-accent-40)] rounded-t-3xl sm:rounded-3xl p-5 shadow-[0_0_50px_var(--lu-glow-soft)] space-y-4 text-white relative animate-slideUp">
             {/* Cabeçalho do Modal Google */}
             <div className="flex items-center justify-between border-b border-gray-800 pb-3">
               <div className="flex items-center gap-2.5">
@@ -318,7 +320,7 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({
                     type="button"
                     disabled={isAuthenticatingSocial !== null}
                     onClick={() => handleSelectGoogleAccount(acc)}
-                    className="w-full p-3 rounded-2xl bg-[#1A231C] border border-gray-800 hover:border-[#78FF00]/60 hover:bg-[#222d25] transition-all flex items-center justify-between group text-left disabled:opacity-50"
+                    className="w-full p-3 rounded-2xl bg-[var(--lu-surface-alt)] border border-gray-800 hover:border-[var(--lu-accent-50)] hover:bg-[var(--lu-surface-hover)] transition-all flex items-center justify-between group text-left disabled:opacity-50 cursor-pointer"
                   >
                     <div className="flex items-center gap-3">
                       <div
@@ -327,16 +329,16 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({
                         {acc.name.charAt(0)}
                       </div>
                       <div className="overflow-hidden">
-                        <h4 className="text-xs font-bold text-white group-hover:text-[#78FF00] transition-colors truncate">
+                        <h4 className="text-xs font-bold text-white group-hover:text-[var(--lu-accent)] transition-colors truncate">
                           {acc.name}
                         </h4>
                         <p className="text-[11px] text-gray-400 truncate">{acc.email}</p>
                       </div>
                     </div>
                     {isAuthenticatingSocial === 'google' ? (
-                      <Loader2 className="w-4 h-4 text-[#78FF00] animate-spin shrink-0" />
+                      <Loader2 className="w-4 h-4 text-[var(--lu-accent)] animate-spin shrink-0" />
                     ) : (
-                      <ChevronRight className="w-4 h-4 text-gray-600 group-hover:text-[#78FF00] group-hover:translate-x-0.5 transition-all shrink-0" />
+                      <ChevronRight className="w-4 h-4 text-gray-600 group-hover:text-[var(--lu-accent)] group-hover:translate-x-0.5 transition-all shrink-0" />
                     )}
                   </button>
                 ))}
@@ -345,9 +347,9 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({
                 <button
                   type="button"
                   onClick={() => setShowCustomEmailInput(true)}
-                  className="w-full p-3 rounded-2xl bg-[#121814] border border-dashed border-gray-700 hover:border-[#78FF00] hover:text-[#78FF00] transition-all flex items-center justify-center gap-2 text-xs font-bold text-gray-400 mt-2"
+                  className="w-full p-3 rounded-2xl bg-[var(--lu-surface)] border border-dashed border-gray-700 hover:border-[var(--lu-accent)] hover:text-[var(--lu-accent)] transition-all flex items-center justify-center gap-2 text-xs font-bold text-gray-400 mt-2 cursor-pointer"
                 >
-                  <Plus className="w-4 h-4 text-[#78FF00]" />
+                  <Plus className="w-4 h-4 text-[var(--lu-accent)]" />
                   <span>Usar outra conta Google</span>
                 </button>
               </div>
@@ -361,7 +363,7 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({
                     placeholder="Ex: Carlos Silva"
                     value={customName}
                     onChange={(e) => setCustomName(e.target.value)}
-                    className="w-full bg-[#1A231C] border border-gray-700 focus:border-[#78FF00] rounded-xl py-2 px-3 text-xs text-white outline-none"
+                    className="w-full bg-[var(--lu-surface-alt)] border border-gray-700 focus:border-[var(--lu-accent)] rounded-xl py-2 px-3 text-xs text-white outline-none"
                   />
                 </div>
                 <div>
@@ -372,20 +374,20 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({
                     placeholder="seu.email@gmail.com"
                     value={customEmail}
                     onChange={(e) => setCustomEmail(e.target.value)}
-                    className="w-full bg-[#1A231C] border border-gray-700 focus:border-[#78FF00] rounded-xl py-2 px-3 text-xs text-white outline-none"
+                    className="w-full bg-[var(--lu-surface-alt)] border border-gray-700 focus:border-[var(--lu-accent)] rounded-xl py-2 px-3 text-xs text-white outline-none"
                   />
                 </div>
                 <div className="flex items-center gap-2 pt-1">
                   <button
                     type="submit"
-                    className="flex-1 py-2.5 bg-[#78FF00] text-black font-extrabold text-xs rounded-xl hover:bg-[#6be600]"
+                    className="flex-1 py-2.5 bg-[var(--lu-accent)] text-[var(--lu-on-accent)] font-extrabold text-xs rounded-xl hover:bg-[var(--lu-accent-hover)] cursor-pointer"
                   >
                     Entrar com esta Conta
                   </button>
                   <button
                     type="button"
                     onClick={() => setShowCustomEmailInput(false)}
-                    className="py-2.5 px-3 bg-[#1A231C] text-gray-300 text-xs font-bold rounded-xl"
+                    className="py-2.5 px-3 bg-[var(--lu-surface-alt)] text-gray-300 text-xs font-bold rounded-xl cursor-pointer"
                   >
                     Voltar
                   </button>
@@ -486,10 +488,10 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({
       {/* ------------------------------------------------------------- */}
       {isDeviceSimulatorOpen && (
         <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4 animate-fadeIn">
-          <div className="w-full max-w-sm bg-[#121814] border border-[#78FF00]/50 rounded-t-3xl sm:rounded-3xl p-5 shadow-[0_0_50px_rgba(120,255,0,0.3)] space-y-4 text-white relative animate-slideUp">
+          <div className="w-full max-w-sm bg-[var(--lu-surface)] border border-[var(--lu-accent-50)] rounded-t-3xl sm:rounded-3xl p-5 shadow-[0_0_50px_var(--lu-glow-soft)] space-y-4 text-white relative animate-slideUp">
             <div className="flex items-center justify-between border-b border-gray-800 pb-3">
               <div className="flex items-center gap-2">
-                <SlidersHorizontal className="w-5 h-5 text-[#78FF00]" />
+                <SlidersHorizontal className="w-5 h-5 text-[var(--lu-accent)]" />
                 <div>
                   <h3 className="text-sm font-extrabold text-white">
                     Simulador de Contas no Aparelho
@@ -502,7 +504,7 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({
               <button
                 type="button"
                 onClick={() => setIsDeviceSimulatorOpen(false)}
-                className="p-1.5 text-gray-400 hover:text-white rounded-lg bg-gray-800/50"
+                className="p-1.5 text-gray-400 hover:text-white rounded-lg bg-gray-800/50 cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -510,7 +512,7 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({
 
             <div className="space-y-3 text-xs">
               {/* Toggle Contas Google */}
-              <div className="p-3 bg-[#1A231C] border border-gray-800 rounded-xl space-y-2">
+              <div className="p-3 bg-[var(--lu-surface-alt)] border border-gray-800 rounded-xl space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="font-bold flex items-center gap-1.5 text-white">
                     <span className="w-2 h-2 rounded-full bg-[#EA4335]" />
@@ -519,7 +521,7 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({
                   <span
                     className={`text-[10px] font-extrabold px-2 py-0.5 rounded-full ${
                       deviceAuth.hasGoogleAccounts
-                        ? 'bg-[#78FF00]/20 text-[#78FF00]'
+                        ? 'bg-[var(--lu-accent-20)] text-[var(--lu-accent)]'
                         : 'bg-red-500/20 text-red-400'
                     }`}
                   >
@@ -539,10 +541,10 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({
                     onClick={() => {
                       setDeviceGoogleEnabled(!deviceAuth.hasGoogleAccounts);
                     }}
-                    className={`w-full py-2 px-3 rounded-lg font-bold text-xs transition-all ${
+                    className={`w-full py-2 px-3 rounded-lg font-bold text-xs transition-all cursor-pointer ${
                       deviceAuth.hasGoogleAccounts
                         ? 'bg-red-950/60 hover:bg-red-900/60 text-red-300 border border-red-800/50'
-                        : 'bg-[#78FF00] hover:bg-[#6be600] text-black'
+                        : 'bg-[var(--lu-accent)] hover:bg-[var(--lu-accent-hover)] text-[var(--lu-on-accent)]'
                     }`}
                   >
                     {deviceAuth.hasGoogleAccounts
@@ -553,7 +555,7 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({
               </div>
 
               {/* Toggle Conta Apple ID */}
-              <div className="p-3 bg-[#1A231C] border border-gray-800 rounded-xl space-y-2">
+              <div className="p-3 bg-[var(--lu-surface-alt)] border border-gray-800 rounded-xl space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="font-bold flex items-center gap-1.5 text-white">
                     <span className="w-2 h-2 rounded-full bg-white" />
@@ -562,7 +564,7 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({
                   <span
                     className={`text-[10px] font-extrabold px-2 py-0.5 rounded-full ${
                       deviceAuth.hasAppleAccount
-                        ? 'bg-[#78FF00]/20 text-[#78FF00]'
+                        ? 'bg-[var(--lu-accent-20)] text-[var(--lu-accent)]'
                         : 'bg-red-500/20 text-red-400'
                     }`}
                   >
@@ -580,10 +582,10 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({
                     onClick={() => {
                       setDeviceAppleEnabled(!deviceAuth.hasAppleAccount);
                     }}
-                    className={`w-full py-2 px-3 rounded-lg font-bold text-xs transition-all ${
+                    className={`w-full py-2 px-3 rounded-lg font-bold text-xs transition-all cursor-pointer ${
                       deviceAuth.hasAppleAccount
                         ? 'bg-red-950/60 hover:bg-red-900/60 text-red-300 border border-red-800/50'
-                        : 'bg-[#78FF00] hover:bg-[#6be600] text-black'
+                        : 'bg-[var(--lu-accent)] hover:bg-[var(--lu-accent-hover)] text-[var(--lu-on-accent)]'
                     }`}
                   >
                     {deviceAuth.hasAppleAccount
@@ -600,7 +602,7 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({
                 resetDeviceDetectionToAuto();
                 setIsDeviceSimulatorOpen(false);
               }}
-              className="w-full py-2.5 bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs font-bold rounded-xl"
+              className="w-full py-2.5 bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs font-bold rounded-xl cursor-pointer"
             >
               Restaurar Detecção Automática do Aparelho
             </button>
@@ -610,40 +612,40 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({
 
       {/* Top Header */}
       <div className="pt-2">
-        {/* App Logo Header + Simulator Badge */}
-        <div className="flex items-center justify-between mb-3">
-          <div className="w-10" />
-          <div className="flex items-center justify-center gap-2">
+        {/* App Logo Header + Theme Toggle + Simulator Badge */}
+        <div className="flex items-center justify-between gap-2 mb-3">
+          <div className="flex items-center gap-2">
             <LevelUpLogo size="sm" />
             <span className="font-extrabold text-base tracking-tight italic">
-              LEVEL<span className="text-[#78FF00] not-italic">UP</span>
+              LEVEL<span className="text-[var(--lu-accent)] not-italic">UP</span>
             </span>
           </div>
 
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1.5 flex-wrap justify-end">
+            <ThemeToggleButton variant="compact" />
             <DownloadAppButton variant="navbar" label="Baixar App" showDetectedBadge={false} />
 
             {/* Botão discreto para testar/simular contas do aparelho */}
             <button
               type="button"
               onClick={() => setIsDeviceSimulatorOpen(true)}
-              className="flex items-center gap-1 p-1.5 sm:px-2 sm:py-1 rounded-xl bg-[#121814] border border-gray-800 hover:border-[#78FF00]/50 text-gray-400 hover:text-[#78FF00] transition-all text-[10px] font-bold"
+              className="flex items-center gap-1 p-1.5 sm:px-2 sm:py-1 rounded-xl bg-[var(--lu-surface)] border border-gray-800 hover:border-[var(--lu-accent-50)] text-gray-400 hover:text-[var(--lu-accent)] transition-all text-[10px] font-bold cursor-pointer"
               title="Configurar/simular contas salvas no aparelho"
             >
-              <Smartphone className="w-3.5 h-3.5 text-[#78FF00]" />
+              <Smartphone className="w-3.5 h-3.5 text-[var(--lu-accent)]" />
               <span className="hidden sm:inline">Contas</span>
             </button>
           </div>
         </div>
 
         {/* Mode Selector Header Toggle */}
-        <div className="flex items-center gap-2 mt-2 mb-2 p-1 bg-[#121814] border border-gray-800 rounded-xl">
+        <div className="flex items-center gap-2 mt-2 mb-2 p-1 bg-[var(--lu-surface)] border border-gray-800 rounded-xl">
           <button
             type="button"
             onClick={() => toggleMode('login')}
-            className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
+            className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
               mode === 'login'
-                ? 'bg-[#78FF00] text-black shadow-[0_0_10px_rgba(120,255,0,0.3)]'
+                ? 'bg-[var(--lu-accent)] text-[var(--lu-on-accent)] shadow-[0_0_10px_var(--lu-glow-soft)]'
                 : 'text-gray-400 hover:text-white'
             }`}
           >
@@ -653,9 +655,9 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({
           <button
             type="button"
             onClick={() => toggleMode('signup')}
-            className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
+            className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
               mode === 'signup'
-                ? 'bg-[#78FF00] text-black shadow-[0_0_10px_rgba(120,255,0,0.3)]'
+                ? 'bg-[var(--lu-accent)] text-[var(--lu-on-accent)] shadow-[0_0_10px_var(--lu-glow-soft)]'
                 : 'text-gray-400 hover:text-white'
             }`}
           >
@@ -695,7 +697,7 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({
                 placeholder="Ex: Carlos Silva"
                 value={nome}
                 onChange={(e) => setNome(e.target.value)}
-                className="w-full bg-[#121814] border border-gray-800 focus:border-[#78FF00] focus:ring-1 focus:ring-[#78FF00] rounded-xl py-2.5 pl-10 pr-4 text-sm text-white placeholder-gray-600 outline-none transition-all"
+                className="w-full bg-[var(--lu-surface)] border border-gray-800 focus:border-[var(--lu-accent)] focus:ring-1 focus:ring-[var(--lu-accent)] rounded-xl py-2.5 pl-10 pr-4 text-sm text-white placeholder-gray-600 outline-none transition-all"
               />
             </div>
           </div>
@@ -712,7 +714,7 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({
               placeholder="seu.email@exemplo.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full bg-[#121814] border border-gray-800 focus:border-[#78FF00] focus:ring-1 focus:ring-[#78FF00] rounded-xl py-2.5 pl-10 pr-4 text-sm text-white placeholder-gray-600 outline-none transition-all"
+              className="w-full bg-[var(--lu-surface)] border border-gray-800 focus:border-[var(--lu-accent)] focus:ring-1 focus:ring-[var(--lu-accent)] rounded-xl py-2.5 pl-10 pr-4 text-sm text-white placeholder-gray-600 outline-none transition-all"
             />
           </div>
         </div>
@@ -724,7 +726,7 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({
             <select
               value={genero}
               onChange={(e) => setGenero(e.target.value as Gender)}
-              className="w-full bg-[#121814] border border-gray-800 focus:border-[#78FF00] focus:ring-1 focus:ring-[#78FF00] rounded-xl py-2.5 px-4 text-sm text-white outline-none transition-all"
+              className="w-full bg-[var(--lu-surface)] border border-gray-800 focus:border-[var(--lu-accent)] focus:ring-1 focus:ring-[var(--lu-accent)] rounded-xl py-2.5 px-4 text-sm text-white outline-none transition-all"
             >
               <option value="masculino">Masculino</option>
               <option value="feminino">Feminino</option>
@@ -745,7 +747,7 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({
               placeholder="••••••••"
               value={senha}
               onChange={(e) => setSenha(e.target.value)}
-              className="w-full bg-[#121814] border border-gray-800 focus:border-[#78FF00] focus:ring-1 focus:ring-[#78FF00] rounded-xl py-2.5 pl-10 pr-4 text-sm text-white placeholder-gray-600 outline-none transition-all"
+              className="w-full bg-[var(--lu-surface)] border border-gray-800 focus:border-[var(--lu-accent)] focus:ring-1 focus:ring-[var(--lu-accent)] rounded-xl py-2.5 pl-10 pr-4 text-sm text-white placeholder-gray-600 outline-none transition-all"
             />
           </div>
         </div>
@@ -762,7 +764,7 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({
                 placeholder="••••••••"
                 value={confirmarSenha}
                 onChange={(e) => setConfirmarSenha(e.target.value)}
-                className="w-full bg-[#121814] border border-gray-800 focus:border-[#78FF00] focus:ring-1 focus:ring-[#78FF00] rounded-xl py-2.5 pl-10 pr-4 text-sm text-white placeholder-gray-600 outline-none transition-all"
+                className="w-full bg-[var(--lu-surface)] border border-gray-800 focus:border-[var(--lu-accent)] focus:ring-1 focus:ring-[var(--lu-accent)] rounded-xl py-2.5 pl-10 pr-4 text-sm text-white placeholder-gray-600 outline-none transition-all"
               />
             </div>
           </div>
@@ -776,14 +778,14 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({
                 type="checkbox"
                 checked={aceitouLgpd}
                 onChange={(e) => setAceitouLgpd(e.target.checked)}
-                className="mt-1 w-4 h-4 accent-[#78FF00] bg-[#121814] border-gray-700 rounded cursor-pointer"
+                className="mt-1 w-4 h-4 accent-[var(--lu-accent)] bg-[var(--lu-surface)] border-gray-700 rounded cursor-pointer"
               />
               <span className="text-xs text-gray-300 leading-snug">
                 Aceito os termos da{' '}
                 <button
                   type="button"
                   onClick={() => setIsLgpdModalOpen(true)}
-                  className="text-[#78FF00] hover:underline font-semibold"
+                  className="text-[var(--lu-accent)] hover:underline font-semibold cursor-pointer"
                 >
                   LGPD (Lei Geral de Proteção de Dados)
                 </button>{' '}
@@ -796,16 +798,16 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({
         {/* Botão de Envio */}
         <button
           type="submit"
-          className="w-full mt-3 py-3.5 px-4 bg-[#78FF00] hover:bg-[#6be600] active:scale-[0.99] text-[#0A0D0B] font-extrabold text-sm rounded-xl shadow-[0_0_20px_rgba(120,255,0,0.35)] transition-all flex items-center justify-center gap-2"
+          className="w-full mt-3 py-3.5 px-4 bg-[var(--lu-accent)] hover:bg-[var(--lu-accent-hover)] active:scale-[0.99] text-[var(--lu-on-accent)] font-extrabold text-sm rounded-xl shadow-[0_0_20px_var(--lu-glow)] transition-all flex items-center justify-center gap-2 cursor-pointer"
         >
           {mode === 'login' ? (
             <>
-              <LogIn className="w-5 h-5 text-[#0A0D0B]" />
+              <LogIn className="w-5 h-5 text-[var(--lu-on-accent)]" />
               <span>Entrar</span>
             </>
           ) : (
             <>
-              <CheckCircle2 className="w-5 h-5 text-[#0A0D0B]" />
+              <CheckCircle2 className="w-5 h-5 text-[var(--lu-on-accent)]" />
               <span>Cadastrar e Continuar</span>
             </>
           )}
@@ -819,7 +821,7 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({
               <button
                 type="button"
                 onClick={() => toggleMode('signup')}
-                className="text-[#78FF00] font-bold hover:underline"
+                className="text-[var(--lu-accent)] font-bold hover:underline cursor-pointer"
               >
                 Cadastre-se
               </button>
@@ -830,7 +832,7 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({
               <button
                 type="button"
                 onClick={() => toggleMode('login')}
-                className="text-[#78FF00] font-bold hover:underline"
+                className="text-[var(--lu-accent)] font-bold hover:underline cursor-pointer"
               >
                 Faça Login
               </button>
@@ -863,10 +865,10 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({
                   type="button"
                   disabled={isAuthenticatingSocial !== null}
                   onClick={() => setIsGoogleModalOpen(true)}
-                  className="flex items-center justify-center gap-2 py-2.5 px-3 bg-[#121814] hover:bg-[#1a231c] border border-gray-800 hover:border-[#78FF00]/50 rounded-xl text-xs font-bold text-gray-200 transition-all active:scale-95 disabled:opacity-50"
+                  className="flex items-center justify-center gap-2 py-2.5 px-3 bg-[var(--lu-surface)] hover:bg-[var(--lu-surface-alt)] border border-gray-800 hover:border-[var(--lu-accent-50)] rounded-xl text-xs font-bold text-gray-200 transition-all active:scale-95 disabled:opacity-50 cursor-pointer"
                 >
                   {isAuthenticatingSocial === 'google' ? (
-                    <Loader2 className="w-4 h-4 text-[#78FF00] animate-spin" />
+                    <Loader2 className="w-4 h-4 text-[var(--lu-accent)] animate-spin" />
                   ) : (
                     <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24">
                       <path
@@ -897,7 +899,7 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({
                   type="button"
                   disabled={isAuthenticatingSocial !== null}
                   onClick={() => setIsAppleSheetOpen(true)}
-                  className="flex items-center justify-center gap-2 py-2.5 px-3 bg-[#121814] hover:bg-[#1a231c] border border-gray-800 hover:border-[#78FF00]/50 rounded-xl text-xs font-bold text-gray-200 transition-all active:scale-95 disabled:opacity-50"
+                  className="flex items-center justify-center gap-2 py-2.5 px-3 bg-[var(--lu-surface)] hover:bg-[var(--lu-surface-alt)] border border-gray-800 hover:border-[var(--lu-accent-50)] rounded-xl text-xs font-bold text-gray-200 transition-all active:scale-95 disabled:opacity-50 cursor-pointer"
                 >
                   {isAuthenticatingSocial === 'apple' ? (
                     <Loader2 className="w-4 h-4 text-white animate-spin" />
@@ -912,7 +914,7 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({
             </div>
           </>
         ) : (
-          <div className="p-3 rounded-xl bg-[#121814] border border-gray-800/80 text-center">
+          <div className="p-3 rounded-xl bg-[var(--lu-surface)] border border-gray-800/80 text-center">
             <p className="text-[11px] text-gray-400">
               Nenhuma conta Google ou Apple vinculada ao aparelho. Opções omitidas da interface.
             </p>
@@ -922,14 +924,14 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({
         {/* Simulador rápido de hardware/contas na tela de login */}
         <div className="mt-3 pt-2 border-t border-gray-900/60 flex items-center justify-between text-[10px]">
           <span className="text-gray-500 font-semibold flex items-center gap-1">
-            <Smartphone className="w-3 h-3 text-[#78FF00]" />
+            <Smartphone className="w-3 h-3 text-[var(--lu-accent)]" />
             Contas no Aparelho:
           </span>
           <div className="flex items-center gap-1.5">
             <button
               type="button"
               onClick={() => setDeviceGoogleEnabled(!deviceAuth.hasGoogleAccounts)}
-              className={`px-2 py-0.5 rounded-full font-bold transition-all border ${
+              className={`px-2 py-0.5 rounded-full font-bold transition-all border cursor-pointer ${
                 deviceAuth.hasGoogleAccounts
                   ? 'bg-blue-950/60 border-blue-800/70 text-blue-400 hover:bg-blue-900/60'
                   : 'bg-zinc-900/80 border-zinc-800 text-zinc-500 hover:text-white'
@@ -941,7 +943,7 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({
             <button
               type="button"
               onClick={() => setDeviceAppleEnabled(!deviceAuth.hasAppleAccount)}
-              className={`px-2 py-0.5 rounded-full font-bold transition-all border ${
+              className={`px-2 py-0.5 rounded-full font-bold transition-all border cursor-pointer ${
                 deviceAuth.hasAppleAccount
                   ? 'bg-zinc-800 border-zinc-600 text-white hover:bg-zinc-700'
                   : 'bg-zinc-900/80 border-zinc-800 text-zinc-500 hover:text-white'

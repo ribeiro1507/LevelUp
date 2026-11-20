@@ -157,7 +157,7 @@ export default function App() {
 
     // 4. Main Tab Views
     return (
-      <div className="relative min-h-full flex flex-col justify-between bg-[#0A0D0B]">
+      <div className="relative min-h-full flex flex-col justify-between bg-[var(--lu-bg)]">
         {/* Active Tab Screen */}
         <div className="flex-1">
           {activeTab === 'inicio' && (
@@ -206,57 +206,69 @@ export default function App() {
         </div>
 
         {/* Bottom Navigation Bar */}
-        <nav className="sticky bottom-0 left-0 right-0 z-40 bg-[#0A0D0B]/95 backdrop-blur-lg border-t border-gray-800/90 px-2 py-2 flex items-center justify-around">
+        <nav className="sticky bottom-0 left-0 right-0 z-40 bg-[var(--lu-bg)]/95 backdrop-blur-lg border-t border-[var(--lu-accent-20)] px-2 py-2 flex items-center justify-around">
           {/* Tab 1: Início */}
           <button
             onClick={() => handleNavigateTab('inicio')}
-            className={`flex flex-col items-center gap-1 py-1 px-2.5 rounded-xl transition-all ${
+            className={`relative flex flex-col items-center gap-1 py-1 px-3 rounded-xl transition-all cursor-pointer ${
               activeTab === 'inicio'
-                ? 'text-[#78FF00] font-bold scale-105'
-                : 'text-gray-500 hover:text-gray-300 font-medium'
+                ? 'text-[var(--lu-accent)] font-bold scale-105'
+                : 'text-gray-500 hover:text-[var(--lu-accent)] font-medium'
             }`}
           >
-            <Home className={`w-5 h-5 ${activeTab === 'inicio' ? 'text-[#78FF00]' : ''}`} />
+            <Home className={`w-5 h-5 ${activeTab === 'inicio' ? 'text-[var(--lu-accent)]' : ''}`} />
             <span className="text-[10px]">Início</span>
+            {activeTab === 'inicio' && (
+              <span className="w-4 h-0.5 rounded-full bg-[var(--lu-accent)]" />
+            )}
           </button>
 
           {/* Tab 2: Gravar */}
           <button
             onClick={() => handleNavigateTab('gravar')}
-            className={`flex flex-col items-center gap-1 py-1 px-2.5 rounded-xl transition-all ${
+            className={`relative flex flex-col items-center gap-1 py-1 px-3 rounded-xl transition-all cursor-pointer ${
               activeTab === 'gravar'
-                ? 'text-[#78FF00] font-bold scale-105'
-                : 'text-gray-500 hover:text-gray-300 font-medium'
+                ? 'text-[var(--lu-accent)] font-bold scale-105'
+                : 'text-gray-500 hover:text-[var(--lu-accent)] font-medium'
             }`}
           >
-            <PlayCircle className={`w-5 h-5 ${activeTab === 'gravar' ? 'text-[#78FF00]' : ''}`} />
+            <PlayCircle className={`w-5 h-5 ${activeTab === 'gravar' ? 'text-[var(--lu-accent)]' : ''}`} />
             <span className="text-[10px]">Gravar</span>
+            {activeTab === 'gravar' && (
+              <span className="w-4 h-0.5 rounded-full bg-[var(--lu-accent)]" />
+            )}
           </button>
 
           {/* Tab 3: Treinos */}
           <button
             onClick={() => handleNavigateTab('treinos')}
-            className={`flex flex-col items-center gap-1 py-1 px-2.5 rounded-xl transition-all ${
+            className={`relative flex flex-col items-center gap-1 py-1 px-3 rounded-xl transition-all cursor-pointer ${
               activeTab === 'treinos'
-                ? 'text-[#78FF00] font-bold scale-105'
-                : 'text-gray-500 hover:text-gray-300 font-medium'
+                ? 'text-[var(--lu-accent)] font-bold scale-105'
+                : 'text-gray-500 hover:text-[var(--lu-accent)] font-medium'
             }`}
           >
-            <Dumbbell className={`w-5 h-5 ${activeTab === 'treinos' ? 'text-[#78FF00]' : ''}`} />
+            <Dumbbell className={`w-5 h-5 ${activeTab === 'treinos' ? 'text-[var(--lu-accent)]' : ''}`} />
             <span className="text-[10px]">Treinos</span>
+            {activeTab === 'treinos' && (
+              <span className="w-4 h-0.5 rounded-full bg-[var(--lu-accent)]" />
+            )}
           </button>
 
           {/* Tab 4: Perfil */}
           <button
             onClick={() => handleNavigateTab('perfil')}
-            className={`flex flex-col items-center gap-1 py-1 px-2.5 rounded-xl transition-all ${
+            className={`relative flex flex-col items-center gap-1 py-1 px-3 rounded-xl transition-all cursor-pointer ${
               activeTab === 'perfil'
-                ? 'text-[#78FF00] font-bold scale-105'
-                : 'text-gray-500 hover:text-gray-300 font-medium'
+                ? 'text-[var(--lu-accent)] font-bold scale-105'
+                : 'text-gray-500 hover:text-[var(--lu-accent)] font-medium'
             }`}
           >
-            <User className={`w-5 h-5 ${activeTab === 'perfil' ? 'text-[#78FF00]' : ''}`} />
+            <User className={`w-5 h-5 ${activeTab === 'perfil' ? 'text-[var(--lu-accent)]' : ''}`} />
             <span className="text-[10px]">Perfil</span>
+            {activeTab === 'perfil' && (
+              <span className="w-4 h-0.5 rounded-full bg-[var(--lu-accent)]" />
+            )}
           </button>
         </nav>
 

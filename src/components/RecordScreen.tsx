@@ -3,6 +3,7 @@ import { Play, Pause, RotateCcw, CheckCircle2, Navigation, Footprints, Bike, Fla
 import L from 'leaflet';
 import { ActivityType, LocationPoint, WorkoutRecord } from '../types';
 import { ConfirmModal } from './ConfirmModal';
+import { useTheme } from '../context/ThemeContext';
 
 interface RecordScreenProps {
   onFinishWorkout: (record: WorkoutRecord) => void;
@@ -10,6 +11,7 @@ interface RecordScreenProps {
 }
 
 export const RecordScreen: React.FC<RecordScreenProps> = ({ onFinishWorkout, onBack }) => {
+  const { theme, accentHex } = useTheme();
   const [activity, setActivity] = useState<ActivityType>('correr');
   const [isTracking, setIsTracking] = useState(false);
   const [seconds, setSeconds] = useState(0);
@@ -49,6 +51,19 @@ export const RecordScreen: React.FC<RecordScreenProps> = ({ onFinishWorkout, onB
     lng: -46.633308,
   });
 
+  const createNeonMarkerIcon = (hex: string) =>
+    L.divIcon({
+      className: 'custom-neon-marker',
+      html: `
+        <div class="relative w-7 h-7 flex items-center justify-center">
+          <div class="absolute inset-0 rounded-full opacity-60 animate-ping" style="background-color: ${hex};"></div>
+          <div class="relative w-4 h-4 rounded-full border-2 border-[#0A090B]" style="background-color: ${hex}; box-shadow: 0 0 12px ${hex};"></div>
+        </div>
+      `,
+      iconSize: [28, 28],
+      iconAnchor: [14, 14],
+    });
+
   // Initialize Leaflet Map
   useEffect(() => {
     if (!mapContainerRef.current) return;
@@ -64,23 +79,13 @@ export const RecordScreen: React.FC<RecordScreenProps> = ({ onFinishWorkout, onB
         maxZoom: 19,
       }).addTo(map);
 
-      // Custom Neon Green pulse marker icon
-      const neonIcon = L.divIcon({
-        className: 'custom-neon-marker',
-        html: `
-          <div class="relative w-7 h-7 flex items-center justify-center">
-            <div class="absolute inset-0 bg-[#78FF00] rounded-full opacity-60 animate-ping"></div>
-            <div class="relative w-4 h-4 bg-[#78FF00] border-2 border-[#0A0D0B] rounded-full shadow-[0_0_12px_#78FF00]"></div>
-          </div>
-        `,
-        iconSize: [28, 28],
-        iconAnchor: [14, 14],
-      });
+      // Custom Neon pulse marker icon
+      const neonIcon = createNeonMarkerIcon(accentHex);
 
       const marker = L.marker([centerCoords.lat, centerCoords.lng], { icon: neonIcon }).addTo(map);
 
       const polyline = L.polyline([], {
-        color: '#78FF00',
+        color: accentHex,
         weight: 5,
         opacity: 0.95,
         lineCap: 'round',
@@ -104,6 +109,16 @@ export const RecordScreen: React.FC<RecordScreenProps> = ({ onFinishWorkout, onB
       }
     };
   }, []);
+
+  // Dynamically update Leaflet marker and route polyline when user switches theme
+  useEffect(() => {
+    if (polylineRef.current) {
+      polylineRef.current.setStyle({ color: accentHex });
+    }
+    if (markerRef.current) {
+      markerRef.current.setIcon(createNeonMarkerIcon(accentHex));
+    }
+  }, [theme, accentHex]);
 
   // Distance accumulation & last position refs for high precision GPS speed
   const accumulatedMetersRef = useRef<number>(0);
@@ -586,44 +601,44 @@ export const RecordScreen: React.FC<RecordScreenProps> = ({ onFinishWorkout, onB
             <button
               type="button"
               onClick={onBack}
-              className="p-2.5 rounded-xl bg-[#121814] border border-gray-800 text-gray-300 hover:text-[#78FF00] hover:border-[#78FF00]/40 transition-all flex items-center gap-1 text-xs font-bold shrink-0 active:scale-95"
+              className="p-2.5 rounded-xl bg-[var(--lu-surface)] border border-gray-800 text-gray-300 hover:text-[var(--lu-accent)] hover:border-[var(--lu-accent-40)] transition-all flex items-center gap-1 text-xs font-bold shrink-0 active:scale-95 cursor-pointer"
               title="Voltar para a tela anterior"
             >
-              <ArrowLeft className="w-4 h-4 text-[#78FF00]" />
+              <ArrowLeft className="w-4 h-4 text-[var(--lu-accent)]" />
               <span className="hidden sm:inline">Voltar</span>
             </button>
           )}
 
           <div>
             <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-2">
-              <Navigation className="w-6 h-6 text-[#78FF00]" />
+              <Navigation className="w-6 h-6 text-[var(--lu-accent)]" />
               <span>Gravar Atividade</span>
             </h2>
-            <p className="text-xs text-gray-400">Rastreamento em tempo real por GPS & Cronômetro.</p>
+            <p className="text-xs text-gray-400">Rastreamento em tempo real por GPS &amp; Cronômetro.</p>
           </div>
         </div>
 
         <button
           onClick={() => setIsSimulatingGps(!isSimulatingGps)}
-          className={`text-[10px] font-bold px-2.5 py-1 rounded-full border transition-colors flex items-center gap-1 ${
+          className={`text-[10px] font-bold px-2.5 py-1 rounded-full border transition-colors flex items-center gap-1 cursor-pointer ${
             isSimulatingGps
-              ? 'bg-[#78FF00]/20 text-[#78FF00] border-[#78FF00]'
-              : 'bg-gray-800 text-gray-400 border-gray-700'
+              ? 'bg-[var(--lu-accent-20)] text-[var(--lu-accent)] border-[var(--lu-accent-50)] shadow-[0_0_12px_var(--lu-glow-soft)]'
+              : 'bg-gray-800 text-gray-400 border-gray-700 hover:border-[var(--lu-accent-40)]'
           }`}
         >
-          <Zap className="w-3 h-3 text-[#78FF00]" />
+          <Zap className="w-3 h-3 text-[var(--lu-accent)]" />
           <span>{isSimulatingGps ? 'Simulação GPS Ativa' : 'Ativar Simulação'}</span>
         </button>
       </div>
 
       {/* Activity Select Buttons: Correr, Caminhar, Pedalar */}
-      <div className="grid grid-cols-3 gap-2 p-1 bg-[#121814] border border-gray-800 rounded-2xl">
+      <div className="grid grid-cols-3 gap-2 p-1 bg-[var(--lu-surface)] border border-gray-800 rounded-2xl">
         <button
           onClick={() => setActivity('correr')}
-          className={`flex items-center justify-center gap-2 py-2.5 px-2 rounded-xl text-xs font-bold transition-all ${
+          className={`flex items-center justify-center gap-2 py-2.5 px-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
             activity === 'correr'
-              ? 'bg-[#78FF00] text-[#0A0D0B] shadow-[0_0_15px_rgba(120,255,0,0.3)]'
-              : 'text-gray-400 hover:text-white'
+              ? 'bg-[var(--lu-accent)] text-[var(--lu-on-accent)] shadow-[0_0_15px_var(--lu-glow)]'
+              : 'text-gray-400 hover:text-[var(--lu-accent)]'
           }`}
         >
           <Footprints className="w-4 h-4" />
@@ -632,10 +647,10 @@ export const RecordScreen: React.FC<RecordScreenProps> = ({ onFinishWorkout, onB
 
         <button
           onClick={() => setActivity('caminhar')}
-          className={`flex items-center justify-center gap-2 py-2.5 px-2 rounded-xl text-xs font-bold transition-all ${
+          className={`flex items-center justify-center gap-2 py-2.5 px-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
             activity === 'caminhar'
-              ? 'bg-[#78FF00] text-[#0A0D0B] shadow-[0_0_15px_rgba(120,255,0,0.3)]'
-              : 'text-gray-400 hover:text-white'
+              ? 'bg-[var(--lu-accent)] text-[var(--lu-on-accent)] shadow-[0_0_15px_var(--lu-glow)]'
+              : 'text-gray-400 hover:text-[var(--lu-accent)]'
           }`}
         >
           <Compass className="w-4 h-4" />
@@ -644,10 +659,10 @@ export const RecordScreen: React.FC<RecordScreenProps> = ({ onFinishWorkout, onB
 
         <button
           onClick={() => setActivity('pedalar')}
-          className={`flex items-center justify-center gap-2 py-2.5 px-2 rounded-xl text-xs font-bold transition-all ${
+          className={`flex items-center justify-center gap-2 py-2.5 px-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
             activity === 'pedalar'
-              ? 'bg-[#78FF00] text-[#0A0D0B] shadow-[0_0_15px_rgba(120,255,0,0.3)]'
-              : 'text-gray-400 hover:text-white'
+              ? 'bg-[var(--lu-accent)] text-[var(--lu-on-accent)] shadow-[0_0_15px_var(--lu-glow)]'
+              : 'text-gray-400 hover:text-[var(--lu-accent)]'
           }`}
         >
           <Bike className="w-4 h-4" />
@@ -656,13 +671,13 @@ export const RecordScreen: React.FC<RecordScreenProps> = ({ onFinishWorkout, onB
       </div>
 
       {/* Real-time Map Canvas Box */}
-      <div className="relative w-full h-60 sm:h-72 rounded-2xl overflow-hidden border border-[#78FF00]/30 shadow-xl bg-[#121814]">
+      <div className="relative w-full h-60 sm:h-72 rounded-2xl overflow-hidden border border-[var(--lu-accent-30)] shadow-[0_0_25px_var(--lu-glow-soft)] bg-[var(--lu-surface)]">
         <div ref={mapContainerRef} className="w-full h-full z-10" />
 
         {/* Overlay map indicators */}
         <div className="absolute top-3 left-3 z-20 flex flex-wrap items-center gap-1.5 max-w-[65%]">
-          <div className="bg-[#0A0D0B]/85 backdrop-blur-md px-2.5 py-1.5 rounded-xl border border-gray-800 text-[11px] font-bold text-gray-300 flex items-center gap-1.5 shadow-lg">
-            <div className={`w-2 h-2 rounded-full ${isTracking ? 'bg-[#78FF00] animate-ping' : 'bg-gray-500'}`} />
+          <div className="bg-[var(--lu-bg)]/85 backdrop-blur-md px-2.5 py-1.5 rounded-xl border border-[var(--lu-accent-30)] text-[11px] font-bold text-gray-300 flex items-center gap-1.5 shadow-lg">
+            <div className={`w-2 h-2 rounded-full bg-[var(--lu-accent)] ${isTracking ? 'animate-ping' : ''}`} />
             <span>{isTracking ? 'Rastreando' : 'GPS Pronto'}</span>
           </div>
 
@@ -670,7 +685,7 @@ export const RecordScreen: React.FC<RecordScreenProps> = ({ onFinishWorkout, onB
             <div
               className={`backdrop-blur-md px-2 py-1 rounded-lg border text-[10px] font-bold flex items-center gap-1 shadow-lg ${
                 gpsAccuracy <= 15
-                  ? 'bg-[#78FF00]/15 text-[#78FF00] border-[#78FF00]/40'
+                  ? 'bg-[var(--lu-accent-15)] text-[var(--lu-accent)] border-[var(--lu-accent-40)]'
                   : 'bg-amber-500/15 text-amber-400 border-amber-500/40'
               }`}
             >
@@ -682,7 +697,7 @@ export const RecordScreen: React.FC<RecordScreenProps> = ({ onFinishWorkout, onB
 
         <div className="absolute top-3 right-3 z-20 flex flex-col items-end gap-1.5">
           {isOsmSnapped && (
-            <div className="bg-sky-500/20 backdrop-blur-md px-2.5 py-1.5 rounded-xl border border-sky-500/40 text-[10px] font-bold text-sky-400 flex items-center gap-1 shadow-lg">
+            <div className="bg-[var(--lu-accent-20)] backdrop-blur-md px-2.5 py-1.5 rounded-xl border border-[var(--lu-accent-40)] text-[10px] font-bold text-[var(--lu-accent)] flex items-center gap-1 shadow-lg">
               <Route className="w-3 h-3" />
               <span>{isMatchingLoading ? 'Ajustando vias...' : 'Vias OSRM'}</span>
             </div>
@@ -693,31 +708,35 @@ export const RecordScreen: React.FC<RecordScreenProps> = ({ onFinishWorkout, onB
       {/* Live Metrics Dashboard */}
       <div className="grid grid-cols-3 gap-2">
         {/* Distance */}
-        <div className="p-3 bg-[#121814] border border-gray-800 rounded-2xl text-center">
+        <div className="p-3 bg-[var(--lu-surface)] border border-gray-800 rounded-2xl text-center">
           <span className="text-[10px] text-gray-400 uppercase font-semibold">Distância</span>
-          <p className="text-xl font-black text-[#78FF00] mt-0.5">{distanceKm} <span className="text-xs font-normal text-gray-400">km</span></p>
+          <p className="text-xl font-black text-[var(--lu-accent)] mt-0.5 tabular-nums">{distanceKm} <span className="text-xs font-normal text-gray-400">km</span></p>
         </div>
 
         {/* Speed */}
-        <div className="p-3 bg-[#121814] border border-gray-800 rounded-2xl text-center">
+        <div className="p-3 bg-[var(--lu-surface)] border border-gray-800 rounded-2xl text-center">
           <span className="text-[10px] text-gray-400 uppercase font-semibold">Velocidade</span>
-          <p className="text-xl font-black text-white mt-0.5">{currentSpeedKmH} <span className="text-xs font-normal text-gray-400">km/h</span></p>
+          <p className="text-xl font-black text-white mt-0.5 tabular-nums">{currentSpeedKmH} <span className="text-xs font-normal text-gray-400">km/h</span></p>
         </div>
 
         {/* Calories */}
-        <div className="p-3 bg-[#121814] border border-gray-800 rounded-2xl text-center">
-          <span className="text-[10px] text-gray-400 uppercase font-semibold">Calorias</span>
-          <p className="text-xl font-black text-orange-400 mt-0.5">{calories} <span className="text-xs font-normal text-gray-400">kcal</span></p>
+        <div className="p-3 bg-[var(--lu-surface)] border border-[var(--lu-accent-30)] rounded-2xl text-center shadow-[0_0_15px_var(--lu-glow-soft)]">
+          <span className="text-[10px] text-gray-400 uppercase font-semibold flex items-center justify-center gap-1">
+            <Flame className="w-3 h-3 text-[var(--lu-accent)]" />
+            Calorias
+          </span>
+          <p className="text-xl font-black text-[var(--lu-accent)] mt-0.5 tabular-nums">{calories} <span className="text-xs font-normal text-gray-400">kcal</span></p>
         </div>
       </div>
 
       {/* Big Live Stopwatch Display */}
-      <div className="p-5 bg-[#121814] border border-[#78FF00]/30 rounded-2xl flex flex-col items-center justify-center shadow-lg">
+      <div className="relative overflow-hidden p-5 bg-[var(--lu-surface)] border border-[var(--lu-accent-30)] rounded-2xl flex flex-col items-center justify-center shadow-lg">
+        <div className="absolute top-0 inset-x-0 h-[2px] bg-[var(--lu-accent)]" />
         <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-gray-400 mb-1">
-          <Timer className="w-4 h-4 text-[#78FF00]" />
+          <Timer className="w-4 h-4 text-[var(--lu-accent)]" />
           <span>Cronômetro</span>
         </div>
-        <div className="text-4xl sm:text-5xl font-black text-[#78FF00] font-mono tracking-wider shadow-sm my-1">
+        <div className="text-4xl sm:text-5xl font-black text-[var(--lu-accent)] font-mono tracking-wider tabular-nums my-1">
           {timeFormatted}
         </div>
 
@@ -726,7 +745,7 @@ export const RecordScreen: React.FC<RecordScreenProps> = ({ onFinishWorkout, onB
           {!isTracking && seconds === 0 ? (
             <button
               onClick={handleStartPause}
-              className="w-full py-4 px-4 bg-[#78FF00] hover:bg-[#6be600] text-[#0A0D0B] font-extrabold text-base rounded-2xl flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(120,255,0,0.35)] transition-all active:scale-[0.98]"
+              className="w-full py-4 px-4 bg-[var(--lu-accent)] hover:bg-[var(--lu-accent-hover)] text-[var(--lu-on-accent)] font-extrabold text-base rounded-2xl flex items-center justify-center gap-2 shadow-[0_0_20px_var(--lu-glow)] transition-all active:scale-[0.98] cursor-pointer"
             >
               <Play className="w-6 h-6 fill-current" />
               <span>INICIAR ATIVIDADE</span>
@@ -736,10 +755,10 @@ export const RecordScreen: React.FC<RecordScreenProps> = ({ onFinishWorkout, onB
               {/* Pausar / Continuar Button */}
               <button
                 onClick={handleStartPause}
-                className={`flex-1 py-3.5 px-3 rounded-2xl font-extrabold text-sm sm:text-base flex items-center justify-center gap-2 transition-all active:scale-95 ${
+                className={`flex-1 py-3.5 px-3 rounded-2xl font-extrabold text-sm sm:text-base flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer ${
                   isTracking
                     ? 'bg-amber-500 hover:bg-amber-400 text-black shadow-lg shadow-amber-500/20'
-                    : 'bg-[#78FF00] hover:bg-[#6be600] text-[#0A0D0B] shadow-[0_0_15px_rgba(120,255,0,0.3)]'
+                    : 'bg-[var(--lu-accent)] hover:bg-[var(--lu-accent-hover)] text-[var(--lu-on-accent)] shadow-[0_0_15px_var(--lu-glow)]'
                 }`}
               >
                 {isTracking ? (
@@ -758,7 +777,7 @@ export const RecordScreen: React.FC<RecordScreenProps> = ({ onFinishWorkout, onB
               {/* Terminar Button */}
               <button
                 onClick={handleFinish}
-                className="flex-1 py-3.5 px-3 bg-red-600 hover:bg-red-500 text-white font-extrabold text-sm sm:text-base rounded-2xl flex items-center justify-center gap-2 shadow-lg shadow-red-600/30 transition-all active:scale-95"
+                className="flex-1 py-3.5 px-3 bg-[var(--lu-accent)] hover:bg-[var(--lu-accent-hover)] text-[var(--lu-on-accent)] font-extrabold text-sm sm:text-base rounded-2xl flex items-center justify-center gap-2 shadow-[0_0_20px_var(--lu-glow)] transition-all active:scale-95 cursor-pointer"
               >
                 <CheckCircle2 className="w-5 h-5" />
                 <span>Terminar</span>
@@ -767,7 +786,7 @@ export const RecordScreen: React.FC<RecordScreenProps> = ({ onFinishWorkout, onB
               {/* Reset / Cancel Button */}
               <button
                 onClick={() => setIsConfirmCancelOpen(true)}
-                className="p-3.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-2xl border border-red-500/30 transition-colors shrink-0 flex items-center gap-1 font-bold text-xs"
+                className="p-3.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-2xl border border-red-500/30 transition-colors shrink-0 flex items-center gap-1 font-bold text-xs cursor-pointer"
                 title="Cancelar Treino"
               >
                 <Trash2 className="w-5 h-5 text-red-400" />

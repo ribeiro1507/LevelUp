@@ -32,7 +32,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
           initial={{ scale: 0.9, opacity: 0, y: 10 }}
           animate={{ scale: 1, opacity: 1, y: 0 }}
           exit={{ scale: 0.9, opacity: 0, y: 10 }}
-          className="w-full max-w-sm bg-[#121814] border border-red-500/40 rounded-2xl p-5 shadow-[0_0_30px_rgba(239,68,68,0.25)] text-white space-y-4"
+          className="w-full max-w-sm bg-[var(--lu-surface)] border border-red-500/40 rounded-2xl p-5 shadow-[0_0_30px_rgba(239,68,68,0.25)] text-white space-y-4"
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
@@ -68,7 +68,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
               className={`flex-1 py-3 px-3 font-extrabold text-xs rounded-xl transition-all active:scale-95 flex items-center justify-center gap-1.5 ${
                 isDanger
                   ? 'bg-red-600 hover:bg-red-500 text-white shadow-[0_0_15px_rgba(239,68,68,0.4)]'
-                  : 'bg-[#78FF00] hover:bg-[#6be600] text-[#0A0D0B]'
+                  : 'bg-[var(--lu-accent)] hover:bg-[var(--lu-accent-hover)] text-[var(--lu-on-accent)]'
               }`}
             >
               <Trash2 className="w-4 h-4" />

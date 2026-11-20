@@ -282,17 +282,17 @@ export const WorkoutBuilderScreen: React.FC<WorkoutBuilderScreenProps> = ({
           <button
             type="button"
             onClick={handlePromptCancelExecution}
-            className="p-2.5 rounded-xl bg-[#121814] border border-gray-800 text-gray-300 hover:text-[#78FF00] hover:border-[#78FF00]/40 transition-all flex items-center gap-1.5 text-xs font-bold active:scale-95"
+            className="p-2.5 rounded-xl bg-[var(--lu-surface)] border border-gray-800 text-gray-300 hover:text-[var(--lu-accent)] hover:border-[var(--lu-accent-40)] transition-all flex items-center gap-1.5 text-xs font-bold active:scale-95 cursor-pointer"
             title="Sair / Voltar"
           >
-            <ArrowLeft className="w-4 h-4 text-[#78FF00]" />
+            <ArrowLeft className="w-4 h-4 text-[var(--lu-accent)]" />
             <span>Voltar</span>
           </button>
 
           <button
             type="button"
             onClick={handlePromptCancelExecution}
-            className="py-2.5 px-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 hover:bg-red-500/20 transition-all flex items-center gap-1.5 text-xs font-bold active:scale-95"
+            className="py-2.5 px-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 hover:bg-red-500/20 transition-all flex items-center gap-1.5 text-xs font-bold active:scale-95 cursor-pointer"
             title="Cancelar o treino em andamento"
           >
             <Trash2 className="w-4 h-4" />
@@ -300,13 +300,13 @@ export const WorkoutBuilderScreen: React.FC<WorkoutBuilderScreenProps> = ({
           </button>
         </div>
 
-        <div className="p-4 bg-[#121814] border border-[#78FF00]/40 rounded-2xl flex items-center justify-between shadow-lg">
+        <div className="p-4 bg-[var(--lu-surface)] border border-[var(--lu-accent-40)] rounded-2xl flex items-center justify-between shadow-[0_0_20px_var(--lu-glow-soft)]">
           <div>
-            <span className="text-[10px] uppercase font-bold text-[#78FF00] tracking-wider">Treino em Andamento</span>
+            <span className="text-[10px] uppercase font-bold text-[var(--lu-accent)] tracking-wider">Treino em Andamento</span>
             <h2 className="text-xl font-extrabold text-white">{executingRoutine.titulo}</h2>
           </div>
-          <div className="flex items-center gap-2 bg-[#1A231C] px-3 py-1.5 rounded-xl border border-[#78FF00]/30 font-mono text-lg font-black text-[#78FF00]">
-            <Clock className="w-4 h-4 text-[#78FF00]" />
+          <div className="flex items-center gap-2 bg-[var(--lu-surface-alt)] px-3 py-1.5 rounded-xl border border-[var(--lu-accent-30)] font-mono text-lg font-black text-[var(--lu-accent)] tabular-nums">
+            <Clock className="w-4 h-4 text-[var(--lu-accent)]" />
             <span>{formattedTime}</span>
           </div>
         </div>
@@ -323,14 +323,16 @@ export const WorkoutBuilderScreen: React.FC<WorkoutBuilderScreenProps> = ({
                   onClick={() => handleToggleExerciseCheck(ex.id)}
                   className={`p-4 rounded-2xl border transition-all cursor-pointer flex items-center justify-between ${
                     isChecked
-                      ? 'bg-[#122216] border-[#78FF00] text-white'
-                      : 'bg-[#121814] border-gray-800 hover:border-gray-700'
+                      ? 'bg-[var(--lu-accent-10)] border-[var(--lu-accent)] text-white'
+                      : 'bg-[var(--lu-surface)] border-gray-800 hover:border-gray-700'
                   }`}
                 >
                   <div className="flex items-center gap-3">
                     <div
                       className={`w-7 h-7 rounded-xl flex items-center justify-center font-bold text-xs ${
-                        isChecked ? 'bg-[#78FF00] text-[#0A0D0B]' : 'bg-[#1A231C] text-gray-400'
+                        isChecked
+                          ? 'bg-[var(--lu-accent)] text-[var(--lu-on-accent)]'
+                          : 'bg-[var(--lu-surface-alt)] text-gray-400'
                       }`}
                     >
                       {idx + 1}
@@ -347,10 +349,12 @@ export const WorkoutBuilderScreen: React.FC<WorkoutBuilderScreenProps> = ({
 
                   <div
                     className={`w-6 h-6 rounded-lg border flex items-center justify-center transition-colors ${
-                      isChecked ? 'bg-[#78FF00] border-[#78FF00]' : 'border-gray-700 bg-[#1A231C]'
+                      isChecked
+                        ? 'bg-[var(--lu-accent)] border-[var(--lu-accent)]'
+                        : 'border-gray-700 bg-[var(--lu-surface-alt)]'
                     }`}
                   >
-                    {isChecked && <CheckCircle2 className="w-5 h-5 text-[#0A0D0B]" />}
+                    {isChecked && <CheckCircle2 className="w-5 h-5 text-[var(--lu-on-accent)]" />}
                   </div>
                 </div>
               );
@@ -360,9 +364,9 @@ export const WorkoutBuilderScreen: React.FC<WorkoutBuilderScreenProps> = ({
 
         <button
           onClick={handleFinishRoutineExecution}
-          className="w-full mt-4 py-4 px-4 bg-[#78FF00] hover:bg-[#6be600] active:scale-[0.99] text-[#0A0D0B] font-extrabold text-base rounded-2xl shadow-[0_0_25px_rgba(120,255,0,0.4)] transition-all flex items-center justify-center gap-2"
+          className="w-full mt-4 py-4 px-4 bg-[var(--lu-accent)] hover:bg-[var(--lu-accent-hover)] active:scale-[0.99] text-[var(--lu-on-accent)] font-extrabold text-base rounded-2xl shadow-[0_0_25px_var(--lu-glow)] transition-all flex items-center justify-center gap-2 cursor-pointer"
         >
-          <CheckCircle2 className="w-6 h-6 text-[#0A0D0B]" />
+          <CheckCircle2 className="w-6 h-6 text-[var(--lu-on-accent)]" />
           <span>FINALIZAR TREINO</span>
         </button>
 
@@ -396,18 +400,18 @@ export const WorkoutBuilderScreen: React.FC<WorkoutBuilderScreenProps> = ({
             <button
               type="button"
               onClick={handleHeaderBackClick}
-              className="p-2.5 rounded-xl bg-[#121814] border border-gray-800 text-gray-300 hover:text-[#78FF00] hover:border-[#78FF00]/40 transition-all flex items-center gap-1 text-xs font-bold shrink-0 active:scale-95"
+              className="p-2.5 rounded-xl bg-[var(--lu-surface)] border border-gray-800 text-gray-300 hover:text-[var(--lu-accent)] hover:border-[var(--lu-accent-40)] transition-all flex items-center gap-1 text-xs font-bold shrink-0 active:scale-95 cursor-pointer"
               title="Voltar para a tela anterior"
             >
-              <ArrowLeft className="w-4 h-4 text-[#78FF00]" />
+              <ArrowLeft className="w-4 h-4 text-[var(--lu-accent)]" />
               <span className="hidden sm:inline">Voltar</span>
             </button>
           )}
 
           <div>
             <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-2">
-              <Dumbbell className="w-6 h-6 text-[#78FF00]" />
-              <span>Treinos & Rotinas</span>
+              <Dumbbell className="w-6 h-6 text-[var(--lu-accent)]" />
+              <span>Treinos &amp; Rotinas</span>
             </h2>
             <p className="text-xs text-gray-400">Monte, edite e escolha qual treino realizar hoje.</p>
           </div>
@@ -415,7 +419,7 @@ export const WorkoutBuilderScreen: React.FC<WorkoutBuilderScreenProps> = ({
 
         <button
           onClick={handleStartCreateNew}
-          className="py-2 px-3 bg-[#78FF00] hover:bg-[#6be600] text-[#0A0D0B] font-bold text-xs rounded-xl flex items-center gap-1 shadow-[0_0_12px_rgba(120,255,0,0.3)] transition-all shrink-0"
+          className="py-2 px-3 bg-[var(--lu-accent)] hover:bg-[var(--lu-accent-hover)] text-[var(--lu-on-accent)] font-bold text-xs rounded-xl flex items-center gap-1 shadow-[0_0_15px_var(--lu-glow)] transition-all shrink-0 cursor-pointer"
         >
           <Plus className="w-4 h-4" />
           <span>Novo Treino</span>
@@ -423,12 +427,12 @@ export const WorkoutBuilderScreen: React.FC<WorkoutBuilderScreenProps> = ({
       </div>
 
       {/* Sub-Nav Toggle: Escolher Treino / Montar & Editar */}
-      <div className="grid grid-cols-2 gap-2 p-1 bg-[#121814] border border-gray-800 rounded-2xl">
+      <div className="grid grid-cols-2 gap-2 p-1 bg-[var(--lu-surface)] border border-gray-800 rounded-2xl">
         <button
           onClick={() => setActiveTab('escolher')}
-          className={`py-2.5 rounded-xl text-xs font-bold transition-all ${
+          className={`py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
             activeTab === 'escolher'
-              ? 'bg-[#78FF00] text-[#0A0D0B] shadow-[0_0_12px_rgba(120,255,0,0.3)]'
+              ? 'bg-[var(--lu-accent)] text-[var(--lu-on-accent)] shadow-[0_0_12px_var(--lu-glow)]'
               : 'text-gray-400 hover:text-white'
           }`}
         >
@@ -436,9 +440,9 @@ export const WorkoutBuilderScreen: React.FC<WorkoutBuilderScreenProps> = ({
         </button>
         <button
           onClick={() => setActiveTab('montar')}
-          className={`py-2.5 rounded-xl text-xs font-bold transition-all ${
+          className={`py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
             activeTab === 'montar'
-              ? 'bg-[#78FF00] text-[#0A0D0B] shadow-[0_0_12px_rgba(120,255,0,0.3)]'
+              ? 'bg-[var(--lu-accent)] text-[var(--lu-on-accent)] shadow-[0_0_12px_var(--lu-glow)]'
               : 'text-gray-400 hover:text-white'
           }`}
         >
@@ -455,7 +459,7 @@ export const WorkoutBuilderScreen: React.FC<WorkoutBuilderScreenProps> = ({
             <select
               value={selectedRoutineId}
               onChange={(e) => setSelectedRoutineId(e.target.value)}
-              className="w-full bg-[#121814] border border-gray-800 focus:border-[#78FF00] rounded-2xl py-3 px-4 text-sm text-white outline-none font-bold"
+              className="w-full bg-[var(--lu-surface)] border border-gray-800 focus:border-[var(--lu-accent)] rounded-2xl py-3 px-4 text-sm text-white outline-none font-bold"
             >
               {routines.map((r) => (
                 <option key={r.id} value={r.id}>
@@ -467,26 +471,26 @@ export const WorkoutBuilderScreen: React.FC<WorkoutBuilderScreenProps> = ({
 
           {/* Routine Detail Card */}
           {selectedRoutine && (
-            <div className="bg-[#121814] border border-[#78FF00]/30 rounded-2xl p-5 space-y-4 shadow-xl">
+            <div className="bg-[var(--lu-surface)] border border-[var(--lu-accent-30)] rounded-2xl p-5 space-y-4 shadow-xl">
               <div className="flex items-start justify-between">
                 <div>
-                  <span className="text-[10px] uppercase font-bold text-[#78FF00] bg-[#78FF00]/10 px-2.5 py-1 rounded-full border border-[#78FF00]/30">
-                    {selectedRoutine.categoria}
+                  <span className="text-[10px] uppercase font-bold tracking-wider text-[var(--lu-accent)]">
+                    {selectedRoutine.categoria} · {selectedRoutine.exercicios.length} exercícios
                   </span>
-                  <h3 className="text-xl font-extrabold text-white mt-2">{selectedRoutine.titulo}</h3>
+                  <h3 className="text-xl font-extrabold text-white mt-1">{selectedRoutine.titulo}</h3>
                   <p className="text-xs text-gray-400 mt-1">{selectedRoutine.descricao}</p>
                 </div>
                 <div className="flex gap-1">
                   <button
                     onClick={() => handleStartEdit(selectedRoutine)}
-                    className="p-2 bg-[#1A231C] text-[#78FF00] hover:bg-gray-800 rounded-xl border border-gray-800"
+                    className="p-2 bg-[var(--lu-surface-alt)] text-[var(--lu-accent)] hover:bg-[var(--lu-surface-hover)] rounded-xl border border-gray-800 hover:border-[var(--lu-accent-40)] transition-colors cursor-pointer"
                     title="Editar treino"
                   >
                     <Edit2 className="w-4 h-4" />
                   </button>
                   <button
                     onClick={() => handleDeleteRoutine(selectedRoutine.id)}
-                    className="p-2 bg-[#1A231C] text-red-400 hover:bg-gray-800 rounded-xl border border-gray-800"
+                    className="p-2 bg-[var(--lu-surface-alt)] text-red-400 hover:bg-gray-800 rounded-xl border border-gray-800 cursor-pointer"
                     title="Excluir treino"
                   >
                     <Trash2 className="w-4 h-4" />
@@ -501,16 +505,16 @@ export const WorkoutBuilderScreen: React.FC<WorkoutBuilderScreenProps> = ({
                   {selectedRoutine.exercicios.map((ex, idx) => (
                     <div
                       key={ex.id}
-                      className="p-3 bg-[#1A231C] border border-gray-800 rounded-xl flex items-center justify-between"
+                      className="p-3 bg-[var(--lu-surface-alt)] border border-gray-800 rounded-xl flex items-center justify-between"
                     >
                       <div className="flex items-center gap-2.5">
-                        <span className="text-xs font-black text-[#78FF00] w-5">{idx + 1}.</span>
+                        <span className="text-xs font-black w-5 tabular-nums text-[var(--lu-accent)]">{idx + 1}.</span>
                         <div>
                           <h5 className="text-xs font-bold text-white">{ex.nome}</h5>
                           <span className="text-[10px] text-gray-400">{ex.grupoMuscular}</span>
                         </div>
                       </div>
-                      <div className="text-right text-xs font-semibold text-gray-200">
+                      <div className="text-right text-xs font-semibold text-gray-200 tabular-nums">
                         {ex.series}x{ex.repeticoes} {ex.cargaKg ? `(${ex.cargaKg}kg)` : ''}
                       </div>
                     </div>
@@ -523,7 +527,7 @@ export const WorkoutBuilderScreen: React.FC<WorkoutBuilderScreenProps> = ({
                 <button
                   type="button"
                   onClick={() => handleStartWorkoutExecution(selectedRoutine)}
-                  className="w-full py-4 px-4 bg-[#78FF00] hover:bg-[#6be600] active:scale-[0.99] text-[#0A0D0B] font-extrabold text-base rounded-xl shadow-[0_0_20px_rgba(120,255,0,0.35)] transition-all flex items-center justify-center gap-2"
+                  className="w-full py-4 px-4 bg-[var(--lu-accent)] hover:bg-[var(--lu-accent-hover)] active:scale-[0.99] text-[var(--lu-on-accent)] font-extrabold text-base rounded-xl shadow-[0_0_20px_var(--lu-glow)] transition-all flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <Play className="w-5 h-5 fill-current" />
                   <span>INICIAR TREINO</span>
@@ -538,13 +542,13 @@ export const WorkoutBuilderScreen: React.FC<WorkoutBuilderScreenProps> = ({
       {activeTab === 'montar' && (
         <div className="space-y-4">
           {/* List of existing routines with edit / delete controls */}
-          <div className="bg-[#121814] border border-gray-800 p-4 rounded-2xl space-y-3">
-            <h3 className="text-xs font-bold text-[#78FF00] uppercase tracking-wider flex items-center justify-between">
+          <div className="bg-[var(--lu-surface)] border border-gray-800 p-4 rounded-2xl space-y-3">
+            <h3 className="text-xs font-bold text-[var(--lu-accent)] uppercase tracking-wider flex items-center justify-between">
               <span>Seus Treinos Cadastrados ({routines.length})</span>
               <button
                 type="button"
                 onClick={handleStartCreateNew}
-                className="text-[11px] font-bold text-[#78FF00] hover:underline flex items-center gap-1"
+                className="text-[11px] font-bold text-[var(--lu-accent)] hover:underline flex items-center gap-1 cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5" /> Criar Novo
               </button>
@@ -554,7 +558,7 @@ export const WorkoutBuilderScreen: React.FC<WorkoutBuilderScreenProps> = ({
               {routines.map((r) => (
                 <div
                   key={r.id}
-                  className="p-3 bg-[#1A231C] border border-gray-800 rounded-xl flex items-center justify-between gap-2"
+                  className="p-3 bg-[var(--lu-surface-alt)] border border-gray-800 rounded-xl flex items-center justify-between gap-2"
                 >
                   <div className="min-w-0">
                     <h4 className="text-xs font-bold text-white truncate">{r.titulo}</h4>
@@ -564,7 +568,7 @@ export const WorkoutBuilderScreen: React.FC<WorkoutBuilderScreenProps> = ({
                     <button
                       type="button"
                       onClick={() => handleStartEdit(r)}
-                      className="p-1.5 bg-[#121814] hover:bg-gray-800 text-[#78FF00] rounded-lg border border-gray-700 text-xs font-semibold flex items-center gap-1"
+                      className="p-1.5 bg-[var(--lu-surface)] hover:bg-gray-800 text-[var(--lu-accent)] rounded-lg border border-gray-700 text-xs font-semibold flex items-center gap-1 cursor-pointer"
                       title="Editar este treino"
                     >
                       <Edit2 className="w-3.5 h-3.5" />
@@ -573,7 +577,7 @@ export const WorkoutBuilderScreen: React.FC<WorkoutBuilderScreenProps> = ({
                     <button
                       type="button"
                       onClick={() => handleDeleteRoutine(r.id)}
-                      className="p-1.5 bg-[#121814] hover:bg-red-500/20 text-red-400 rounded-lg border border-red-500/30 text-xs font-semibold flex items-center gap-1"
+                      className="p-1.5 bg-[var(--lu-surface)] hover:bg-red-500/20 text-red-400 rounded-lg border border-red-500/30 text-xs font-semibold flex items-center gap-1 cursor-pointer"
                       title="Deletar este treino"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
@@ -585,8 +589,8 @@ export const WorkoutBuilderScreen: React.FC<WorkoutBuilderScreenProps> = ({
             </div>
           </div>
 
-          <form onSubmit={handleSaveRoutineForm} className="bg-[#121814] border border-gray-800 p-5 rounded-2xl space-y-4">
-            <h3 className="text-sm font-bold text-[#78FF00] uppercase tracking-wider">
+          <form onSubmit={handleSaveRoutineForm} className="bg-[var(--lu-surface)] border border-gray-800 p-5 rounded-2xl space-y-4">
+            <h3 className="text-sm font-bold text-[var(--lu-accent)] uppercase tracking-wider">
               {editingRoutineId === 'NEW' ? 'Criar Novo Treino' : 'Editar Treino Existente'}
             </h3>
 
@@ -599,7 +603,7 @@ export const WorkoutBuilderScreen: React.FC<WorkoutBuilderScreenProps> = ({
                 placeholder="Ex: Treino de Peito & Ombro"
                 value={formTitle}
                 onChange={(e) => setFormTitle(e.target.value)}
-                className="w-full bg-[#1A231C] border border-gray-800 focus:border-[#78FF00] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none"
+                className="w-full bg-[var(--lu-surface-alt)] border border-gray-800 focus:border-[var(--lu-accent)] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none"
               />
             </div>
 
@@ -611,7 +615,7 @@ export const WorkoutBuilderScreen: React.FC<WorkoutBuilderScreenProps> = ({
                   type="text"
                   value={formCategory}
                   onChange={(e) => setFormCategory(e.target.value)}
-                  className="w-full bg-[#1A231C] border border-gray-800 focus:border-[#78FF00] rounded-xl py-2 px-3 text-xs text-white outline-none"
+                  className="w-full bg-[var(--lu-surface-alt)] border border-gray-800 focus:border-[var(--lu-accent)] rounded-xl py-2 px-3 text-xs text-white outline-none"
                 />
               </div>
 
@@ -622,15 +626,15 @@ export const WorkoutBuilderScreen: React.FC<WorkoutBuilderScreenProps> = ({
                   placeholder="Ex: Foco em hipertrofia"
                   value={formDescription}
                   onChange={(e) => setFormDescription(e.target.value)}
-                  className="w-full bg-[#1A231C] border border-gray-800 focus:border-[#78FF00] rounded-xl py-2 px-3 text-xs text-white outline-none"
+                  className="w-full bg-[var(--lu-surface-alt)] border border-gray-800 focus:border-[var(--lu-accent)] rounded-xl py-2 px-3 text-xs text-white outline-none"
                 />
               </div>
             </div>
 
             {/* Add Exercise Box */}
-            <div className="p-3 bg-[#1A231C] border border-gray-800 rounded-xl space-y-2">
+            <div className="p-3 bg-[var(--lu-surface-alt)] border border-gray-800 rounded-xl space-y-2">
               <span className="text-xs font-bold text-gray-300 flex items-center gap-1">
-                <Plus className="w-3.5 h-3.5 text-[#78FF00]" /> Adicionar Exercício
+                <Plus className="w-3.5 h-3.5 text-[var(--lu-accent)]" /> Adicionar Exercício
               </span>
 
               <div className="grid grid-cols-2 gap-2">
@@ -639,14 +643,14 @@ export const WorkoutBuilderScreen: React.FC<WorkoutBuilderScreenProps> = ({
                   placeholder="Nome do Exercício"
                   value={exName}
                   onChange={(e) => setExName(e.target.value)}
-                  className="bg-[#121814] border border-gray-700 rounded-lg py-1.5 px-2 text-xs text-white outline-none"
+                  className="bg-[var(--lu-surface)] border border-gray-700 rounded-lg py-1.5 px-2 text-xs text-white outline-none"
                 />
                 <input
                   type="text"
                   placeholder="Grupo Muscular"
                   value={exMuscle}
                   onChange={(e) => setExMuscle(e.target.value)}
-                  className="bg-[#121814] border border-gray-700 rounded-lg py-1.5 px-2 text-xs text-white outline-none"
+                  className="bg-[var(--lu-surface)] border border-gray-700 rounded-lg py-1.5 px-2 text-xs text-white outline-none"
                 />
               </div>
 
@@ -659,7 +663,7 @@ export const WorkoutBuilderScreen: React.FC<WorkoutBuilderScreenProps> = ({
                     max={20}
                     value={exSets}
                     onChange={(e) => setExSets(Number(e.target.value))}
-                    className="w-full bg-[#121814] border border-gray-700 rounded-lg py-1 px-2 text-xs text-white outline-none"
+                    className="w-full bg-[var(--lu-surface)] border border-gray-700 rounded-lg py-1 px-2 text-xs text-white outline-none"
                   />
                 </div>
                 <div>
@@ -670,7 +674,7 @@ export const WorkoutBuilderScreen: React.FC<WorkoutBuilderScreenProps> = ({
                     max={100}
                     value={exReps}
                     onChange={(e) => setExReps(Number(e.target.value))}
-                    className="w-full bg-[#121814] border border-gray-700 rounded-lg py-1 px-2 text-xs text-white outline-none"
+                    className="w-full bg-[var(--lu-surface)] border border-gray-700 rounded-lg py-1 px-2 text-xs text-white outline-none"
                   />
                 </div>
                 <div>
@@ -681,7 +685,7 @@ export const WorkoutBuilderScreen: React.FC<WorkoutBuilderScreenProps> = ({
                     max={500}
                     value={exWeight}
                     onChange={(e) => setExWeight(Number(e.target.value))}
-                    className="w-full bg-[#121814] border border-gray-700 rounded-lg py-1 px-2 text-xs text-white outline-none"
+                    className="w-full bg-[var(--lu-surface)] border border-gray-700 rounded-lg py-1 px-2 text-xs text-white outline-none"
                   />
                 </div>
               </div>
@@ -689,7 +693,7 @@ export const WorkoutBuilderScreen: React.FC<WorkoutBuilderScreenProps> = ({
               <button
                 type="button"
                 onClick={handleAddExerciseToForm}
-                className="w-full py-2 bg-gray-800 hover:bg-gray-700 text-[#78FF00] font-bold text-xs rounded-lg border border-gray-700 transition-colors"
+                className="w-full py-2 bg-gray-800 hover:bg-gray-700 text-[var(--lu-accent)] font-bold text-xs rounded-lg border border-gray-700 transition-colors cursor-pointer"
               >
                 + Incluir Exercício
               </button>
@@ -701,7 +705,7 @@ export const WorkoutBuilderScreen: React.FC<WorkoutBuilderScreenProps> = ({
               {formExercises.map((e) => (
                 <div
                   key={e.id}
-                  className="p-2.5 bg-[#1A231C] border border-gray-800 rounded-xl flex items-center justify-between text-xs"
+                  className="p-2.5 bg-[var(--lu-surface-alt)] border border-gray-800 rounded-xl flex items-center justify-between text-xs"
                 >
                   <div>
                     <span className="font-bold text-white">{e.nome}</span>
@@ -710,7 +714,7 @@ export const WorkoutBuilderScreen: React.FC<WorkoutBuilderScreenProps> = ({
                   <button
                     type="button"
                     onClick={() => handleRemoveExerciseFromForm(e.id)}
-                    className="p-1.5 text-red-400 hover:text-red-300"
+                    className="p-1.5 text-red-400 hover:text-red-300 cursor-pointer"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -725,14 +729,14 @@ export const WorkoutBuilderScreen: React.FC<WorkoutBuilderScreenProps> = ({
                   setEditingRoutineId(null);
                   setActiveTab('escolher');
                 }}
-                className="flex-1 py-2.5 px-4 bg-gray-800 hover:bg-gray-700 text-gray-300 font-bold text-xs rounded-xl"
+                className="flex-1 py-2.5 px-4 bg-gray-800 hover:bg-gray-700 text-gray-300 font-bold text-xs rounded-xl cursor-pointer"
               >
                 Cancelar
               </button>
 
               <button
                 type="submit"
-                className="flex-1 py-2.5 px-4 bg-[#78FF00] hover:bg-[#6be600] text-[#0A0D0B] font-extrabold text-xs rounded-xl shadow-[0_0_15px_rgba(120,255,0,0.3)]"
+                className="flex-1 py-2.5 px-4 bg-[var(--lu-accent)] hover:bg-[var(--lu-accent-hover)] text-[var(--lu-on-accent)] font-extrabold text-xs rounded-xl shadow-[0_0_15px_var(--lu-glow)] cursor-pointer"
               >
                 Salvar Treino
               </button>

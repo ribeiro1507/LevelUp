@@ -1,20 +1,69 @@
 @import "tailwindcss";
 
+:root,
+[data-theme="green"] {
+  --lu-bg: #0A0D0B;
+  --lu-surface: #121814;
+  --lu-surface-alt: #1A231C;
+  --lu-surface-hover: #212D23;
+  --lu-accent: #78FF00;
+  --lu-accent-bright: #8AFF1E;
+  --lu-accent-hover: #6BE600;
+  --lu-on-accent: #0A0D0B;
+  --lu-accent-10: rgba(120, 255, 0, 0.10);
+  --lu-accent-15: rgba(120, 255, 0, 0.15);
+  --lu-accent-20: rgba(120, 255, 0, 0.20);
+  --lu-accent-30: rgba(120, 255, 0, 0.30);
+  --lu-accent-40: rgba(120, 255, 0, 0.40);
+  --lu-accent-50: rgba(120, 255, 0, 0.50);
+  --lu-glow: rgba(120, 255, 0, 0.38);
+  --lu-glow-soft: rgba(120, 255, 0, 0.16);
+}
+
+[data-theme="pink"] {
+  --lu-bg: #0B090B;
+  --lu-surface: #151014;
+  --lu-surface-alt: #1F161D;
+  --lu-surface-hover: #291C26;
+  --lu-accent: #FF4DA6;
+  --lu-accent-bright: #FF70B8;
+  --lu-accent-hover: #FF3399;
+  --lu-on-accent: #0A090B;
+  --lu-accent-10: rgba(255, 77, 166, 0.10);
+  --lu-accent-15: rgba(255, 77, 166, 0.15);
+  --lu-accent-20: rgba(255, 77, 166, 0.20);
+  --lu-accent-30: rgba(255, 77, 166, 0.30);
+  --lu-accent-40: rgba(255, 77, 166, 0.40);
+  --lu-accent-50: rgba(255, 77, 166, 0.50);
+  --lu-glow: rgba(255, 77, 166, 0.40);
+  --lu-glow-soft: rgba(255, 77, 166, 0.16);
+}
+
+body {
+  background-color: var(--lu-bg);
+  color: #FFFFFF;
+}
+
+::selection {
+  background-color: var(--lu-accent);
+  color: var(--lu-on-accent);
+}
+
 @layer utilities {
   .glow-neon {
-    box-shadow: 0 0 20px rgba(120, 255, 0, 0.4);
+    box-shadow: 0 0 20px var(--lu-glow);
   }
   .glow-neon-lg {
-    box-shadow: 0 0 35px rgba(120, 255, 0, 0.6);
+    box-shadow: 0 0 35px var(--lu-glow);
   }
   .text-neon {
-    color: #78FF00;
+    color: var(--lu-accent);
   }
   .bg-neon {
-    background-color: #78FF00;
+    background-color: var(--lu-accent);
   }
   .border-neon {
-    border-color: #78FF00;
+    border-color: var(--lu-accent);
   }
 }
 
@@ -24,12 +73,12 @@
   height: 100%;
   border-radius: 1rem;
   z-index: 10;
-  background-color: #121814 !important;
+  background-color: var(--lu-surface) !important;
 }
 
 /* Smooth Polyline glow and fluid rendering */
 .smooth-route-polyline {
-  filter: drop-shadow(0 0 6px rgba(120, 255, 0, 0.75));
+  filter: drop-shadow(0 0 6px var(--lu-glow));
 }
 
 .dark-tiles .leaflet-tile-container img {
@@ -42,13 +91,12 @@
   height: 5px;
 }
 ::-webkit-scrollbar-track {
-  background: #0A0D0B;
+  background: var(--lu-bg);
 }
 ::-webkit-scrollbar-thumb {
-  background: #1A231C;
+  background: var(--lu-surface-alt);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #78FF00;
+  background: var(--lu-accent);
 }
-

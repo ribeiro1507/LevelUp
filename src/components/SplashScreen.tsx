@@ -42,7 +42,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) => {
   }, [onFinish]);
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col items-center justify-between bg-[#0A0D0B] p-6 text-white overflow-hidden select-none">
+    <div className="fixed inset-0 z-50 flex flex-col items-center justify-between bg-[var(--lu-bg)] p-6 text-white overflow-hidden select-none">
       {/* Background Image if Tela_Carregamento.JPEG is placed in public/ folder */}
       {bgImageLoaded ? (
         <div className="absolute inset-0 z-0">
@@ -55,20 +55,20 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) => {
             className="w-full h-full object-cover opacity-60"
             referrerPolicy="no-referrer"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0A0D0B] via-[#0A0D0B]/70 to-[#0A0D0B]/80" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[var(--lu-bg)] via-[var(--lu-bg)]/70 to-[var(--lu-bg)]/80" />
         </div>
       ) : (
         <>
           {/* Background Decorative Glow Effect */}
-          <div className="absolute -top-32 -left-32 w-80 h-80 bg-[#78FF00]/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute -bottom-32 -right-32 w-80 h-80 bg-[#78FF00]/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -top-32 -left-32 w-80 h-80 bg-[var(--lu-accent-10)] rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -bottom-32 -right-32 w-80 h-80 bg-[var(--lu-accent-15)] rounded-full blur-3xl pointer-events-none" />
         </>
       )}
 
       {/* Top Brand Tag */}
-      <div className="relative z-10 pt-10 flex items-center gap-2 text-xs font-semibold text-[#78FF00] tracking-widest uppercase">
-        <Zap className="w-4 h-4 animate-pulse text-[#78FF00]" />
-        <span>Performance & Fitness Engine</span>
+      <div className="relative z-10 pt-10 flex items-center gap-2 text-xs font-semibold text-gray-200 tracking-widest uppercase">
+        <Zap className="w-4 h-4 animate-pulse text-[var(--lu-accent)]" />
+        <span>Performance &amp; Fitness Engine</span>
       </div>
 
       {/* Central Icon & Title */}
@@ -81,7 +81,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) => {
           className="relative mb-8"
         >
           {/* Outer Pulsing Neon Ring */}
-          <div className="absolute inset-0 rounded-3xl bg-[#78FF00] blur-xl opacity-50 animate-pulse" />
+          <div className="absolute -inset-1 rounded-3xl bg-[var(--lu-accent)] blur-xl opacity-35 animate-pulse" />
           <LevelUpLogo size="xl" />
         </motion.div>
 
@@ -92,7 +92,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) => {
           transition={{ delay: 0.2, duration: 0.5 }}
           className="text-4xl sm:text-5xl font-black tracking-tight text-white italic drop-shadow-lg"
         >
-          LEVEL<span className="text-[#78FF00] not-italic">UP</span>
+          LEVEL<span className="text-[var(--lu-accent)] not-italic">UP</span>
         </motion.h1>
 
         <motion.p
@@ -107,22 +107,22 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) => {
 
       {/* Bottom Loading Progress Indicator */}
       <div className="relative z-10 w-full max-w-xs mb-8 flex flex-col items-center">
-        <div className="flex justify-between w-full text-xs text-gray-400 mb-2 font-medium">
+        <div className="flex justify-between w-full text-xs text-gray-400 mb-2 font-medium tabular-nums">
           <span>Iniciando sistema...</span>
-          <span className="text-[#78FF00] font-bold">{progress}%</span>
+          <span className="text-[var(--lu-accent)] font-bold">{progress}%</span>
         </div>
 
         {/* Progress bar container */}
-        <div className="w-full h-2 bg-[#1A231C]/90 rounded-full overflow-hidden p-0.5 border border-gray-800 backdrop-blur-md">
+        <div className="w-full h-2 bg-[var(--lu-surface-alt)] rounded-full overflow-hidden p-0.5 border border-[var(--lu-accent-30)] backdrop-blur-md">
           <div
-            className="h-full bg-[#78FF00] rounded-full transition-all duration-100 shadow-[0_0_10px_#78FF00]"
+            className="h-full bg-[var(--lu-accent)] rounded-full transition-all duration-100 shadow-[0_0_12px_var(--lu-glow)]"
             style={{ width: `${progress}%` }}
           />
         </div>
 
         <button
           onClick={onFinish}
-          className="mt-6 text-xs text-gray-400 hover:text-[#78FF00] underline transition-colors"
+          className="mt-6 text-xs text-gray-400 hover:text-[var(--lu-accent)] underline transition-colors cursor-pointer"
         >
           Pular carregamento →
         </button>
@@ -130,7 +130,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) => {
 
       {/* Footer LGPD badge */}
       <div className="relative z-10 flex items-center gap-1.5 text-[10px] text-gray-400 mb-2 font-medium">
-        <ShieldCheck className="w-3.5 h-3.5 text-[#78FF00]" />
+        <ShieldCheck className="w-3.5 h-3.5 text-[var(--lu-accent)]" />
         <span>Em conformidade com a LGPD Brasil</span>
       </div>
     </div>
